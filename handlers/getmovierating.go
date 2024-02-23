@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"moviepin/domain"
 	"moviepin/model"
 	"moviepin/utils"
 	"net/http"
@@ -27,6 +28,13 @@ func (mh MovieHandler) GetMovieRatingHandler(c *gin.Context) {
 	}
 
 	review, err := mh.domain.GetMovieRating(req.ID)
+
+	if err == domain.ErrNotExists {
+		c.JSON(http.StatusNotFound, model.ErrorResponse{
+			Message: err.Error(),
+		})
+		return
+	}
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, model.ErrorResponse{
