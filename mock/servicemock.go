@@ -12,7 +12,7 @@ var (
 		ID:          "6ba7b810-9dad-11d1-80b4-00c04fd430c8",
 		Title:       "The Shawshank Redemption",
 		ReleaseDate: time.Date(1994, time.September, 23, 0, 0, 0, 0, time.UTC),
-		Genre:       "Drama",
+		Genre:       "DRAMA",
 		Director:    "Frank Darabont",
 		Description: "Prisoners",
 	}
@@ -98,6 +98,10 @@ func (s ServiceMock) AddMovie(movie model.Movie) error {
 
 // UpdateMovie updates a movie in the database.
 func (s ServiceMock) UpdateMovie(id string, movie model.Movie) error {
+	if s.Err == NotExistsError {
+		return domain.ErrNotExists
+	}
+
 	if s.Err == UpdateMovieError {
 		return domain.ErrFailedUpdate
 	}

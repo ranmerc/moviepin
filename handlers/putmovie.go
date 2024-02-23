@@ -48,7 +48,7 @@ func (mh MovieHandler) PutMovieHandler(c *gin.Context) {
 	if err != nil {
 		if err == domain.ErrNotExists {
 			c.JSON(http.StatusNotFound, model.ErrorResponse{
-				Message: "movie not found",
+				Message: err.Error(),
 			})
 			return
 		}
