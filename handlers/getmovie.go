@@ -29,14 +29,14 @@ func (mh MovieHandler) GetMovieHandler(c *gin.Context) {
 
 	movie, err := mh.domain.GetMovie(req.ID)
 
-	if err == domain.ErrNotExists {
-		c.JSON(http.StatusNotFound, model.ErrorResponse{
-			Message: err.Error(),
-		})
-		return
-	}
-
 	if err != nil {
+		if err == domain.ErrNotExists {
+			c.JSON(http.StatusNotFound, model.ErrorResponse{
+				Message: err.Error(),
+			})
+			return
+		}
+
 		c.JSON(http.StatusInternalServerError, model.ErrorResponse{
 			Message: err.Error(),
 		})
