@@ -11,9 +11,12 @@ type Movie struct {
 	Description string    `json:"description" validate:"required,max=500"`
 }
 
-// MoviesGetResponse is the response for getting movies.
-type MoviesGetResponse struct {
+type MoviesResponse struct {
 	Movies []*Movie `json:"movies"`
+}
+
+type MovieResponse struct {
+	Movie *Movie `json:"movie"`
 }
 
 type MovieRequestUri struct {
@@ -25,5 +28,5 @@ type MoviesRequestBody struct {
 }
 
 type MovieRequestBody struct {
-	Movies Movie `json:"movie" validate:"required,"`
+	Movies Movie `json:"movie" validate:"required"`
 }
