@@ -31,7 +31,7 @@ func (mh MovieHandler) GetMovieHandler(c *gin.Context) {
 
 	if err == domain.ErrNotExists {
 		c.JSON(http.StatusNotFound, model.ErrorResponse{
-			Message: "movie not found",
+			Message: err.Error(),
 		})
 		return
 	}
@@ -43,5 +43,7 @@ func (mh MovieHandler) GetMovieHandler(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, movie)
+	c.JSON(http.StatusOK, model.MovieResponse{
+		Movie: movie,
+	})
 }

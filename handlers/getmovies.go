@@ -12,7 +12,7 @@ var (
 	ErrFailedToGetMovie = "failed to get movie"
 )
 
-// Responds with all the movies.
+// Responds with details all the movies.
 func (mh MovieHandler) GetMoviesHandler(c *gin.Context) {
 	movies, err := mh.domain.GetMovies()
 
@@ -23,7 +23,7 @@ func (mh MovieHandler) GetMoviesHandler(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, model.MoviesGetResponse{
+	c.JSON(http.StatusOK, model.MoviesResponse{
 		Movies: movies,
 	})
 }

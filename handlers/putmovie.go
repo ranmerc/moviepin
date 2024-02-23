@@ -59,5 +59,7 @@ func (mh MovieHandler) PutMovieHandler(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, movie)
+	c.JSON(http.StatusOK, model.MovieResponse{
+		Movie: &movie,
+	})
 }

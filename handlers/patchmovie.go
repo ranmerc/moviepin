@@ -136,5 +136,7 @@ func (mh MovieHandler) PatchMovieHandler(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, existingMovie)
+	c.JSON(http.StatusOK, model.MovieResponse{
+		Movie: existingMovie,
+	})
 }
