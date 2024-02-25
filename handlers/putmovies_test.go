@@ -68,6 +68,22 @@ func TestPutMoviesHandler(t *testing.T) {
 				"message": "failed to replace movies",
 			},
 		},
+		"invalid request body": {
+			err:    mock.OK,
+			status: http.StatusBadRequest,
+			body:   gin.H{},
+			resp: gin.H{
+				"message": "invalid request body",
+			},
+		},
+		"no movies in request": {
+			err:    mock.OK,
+			status: http.StatusBadRequest,
+			body:   gin.H{"movies": []gin.H{}},
+			resp: gin.H{
+				"message": "at least one movie is required",
+			},
+		},
 	}
 
 	gin.SetMode(gin.TestMode)

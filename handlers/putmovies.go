@@ -14,14 +14,24 @@ func (mh MovieHandler) PutMoviesHandler(c *gin.Context) {
 
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, model.ErrorResponse{
-			Message: err.Error(),
+			Message: ErrInvalidBody.Error(),
 		})
 		return
 	}
 
 	if err := utils.Validate.Struct(req); err != nil {
+		utils.ErrorLogger.Print(err)
+
 		c.JSON(http.StatusBadRequest, gin.H{
-			"message": err.Error(),
+			"message": ErrInvalidBody.Error(),
+		})
+		return
+	}
+
+	// If no movies are sent in request.
+	if len(req.Movies) == 0 {
+		c.JSON(http.StatusBadRequest, model.ErrorResponse{
+			Message: ErrEmptyBody.Error(),
 		})
 		return
 	}

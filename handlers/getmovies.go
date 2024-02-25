@@ -7,11 +7,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-var (
-	// ErrFailedToGetMovie is returned when failed to get movie.
-	ErrFailedToGetMovie = "failed to get movie"
-)
-
 // Responds with details all the movies.
 func (mh MovieHandler) GetMoviesHandler(c *gin.Context) {
 	movies, err := mh.domain.GetMovies()

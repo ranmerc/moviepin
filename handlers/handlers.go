@@ -1,9 +1,24 @@
 package handlers
 
 import (
+	"errors"
 	"moviepin/domain"
 
 	"github.com/gin-gonic/gin"
+)
+
+var (
+	// ErrIDRequired is the error message when the id is required.
+	ErrIDRequired = errors.New("id is required")
+
+	// ErrInvalidID is the error message when the id is invalid.
+	ErrInvalidID = errors.New("invalid id")
+
+	// ErrInvalidBody is the error message when the request body is invalid.
+	ErrInvalidBody = errors.New("invalid request body")
+
+	// ErrEmptyBody is the error message when the request body is empty.
+	ErrEmptyBody = errors.New("at least one movie is required")
 )
 
 // Handler is the interface that defines the movie handler methods.

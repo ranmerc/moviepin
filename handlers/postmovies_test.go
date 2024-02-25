@@ -116,6 +116,22 @@ func TestPostMoviesHandler(t *testing.T) {
 				},
 			},
 		},
+		"body is empty": {
+			err:    mock.OK,
+			status: http.StatusBadRequest,
+			body:   gin.H{},
+			resp: gin.H{
+				"message": "invalid request body",
+			},
+		},
+		"no movies in request": {
+			err:    mock.OK,
+			status: http.StatusBadRequest,
+			body:   gin.H{"movies": []gin.H{}},
+			resp: gin.H{
+				"message": "at least one movie is required",
+			},
+		},
 	}
 
 	gin.SetMode(gin.TestMode)

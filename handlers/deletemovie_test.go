@@ -50,6 +50,14 @@ func TestDeleteMovieHandler(t *testing.T) {
 				"message": "failed to delete movie",
 			},
 		},
+		"invalid id": {
+			id:     "invalid",
+			err:    mock.OK,
+			status: http.StatusBadRequest,
+			resp: gin.H{
+				"message": "invalid id",
+			},
+		},
 	}
 
 	gin.SetMode(gin.TestMode)

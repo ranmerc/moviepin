@@ -14,14 +14,16 @@ func (mh MovieHandler) DeleteMovieHandler(c *gin.Context) {
 
 	if err := c.ShouldBindUri(&req); err != nil {
 		c.JSON(http.StatusBadRequest, model.ErrorResponse{
-			Message: err.Error(),
+			Message: ErrIDRequired.Error(),
 		})
 		return
 	}
 
 	if err := utils.Validate.Struct(req); err != nil {
+		utils.ErrorLogger.Print(err)
+
 		c.JSON(http.StatusBadRequest, model.ErrorResponse{
-			Message: err.Error(),
+			Message: ErrInvalidID.Error(),
 		})
 		return
 	}

@@ -61,6 +61,14 @@ func TestGetMovieRatingHandler(t *testing.T) {
 				"message": "failed to get movie rating",
 			},
 		},
+		"invalid id": {
+			id:     "invalid",
+			err:    mock.OK,
+			status: http.StatusBadRequest,
+			resp: gin.H{
+				"message": "invalid id",
+			},
+		},
 	}
 
 	gin.SetMode(gin.TestMode)
