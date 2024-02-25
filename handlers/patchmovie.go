@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"errors"
 	"moviepin/domain"
 	"moviepin/model"
 	"moviepin/utils"
@@ -8,6 +9,23 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+)
+
+var (
+	// ErrAssertTitle represents an error when a field title failed be asserted.
+	ErrAssertTitle = errors.New("failed to assert type for field title")
+
+	// ErrAssertReleaseDate represents an error when a field releaseDate failed be asserted.
+	ErrAssertReleaseDate = errors.New("failed to assert type for field releaseDate")
+
+	// ErrAssertGenre represents an error when a field genre failed be asserted.
+	ErrAssertGenre = errors.New("failed to assert type for field genre")
+
+	// ErrAssertDirector represents an error when a field director failed be asserted.
+	ErrAssertDirector = errors.New("failed to assert type for field director")
+
+	// ErrAssertDescription represents an error when a field description failed be asserted.
+	ErrAssertDescription = errors.New("failed to assert type for field description")
 )
 
 // Updates a particular movie.
@@ -35,7 +53,7 @@ func (mh MovieHandler) PatchMovieHandler(c *gin.Context) {
 
 	if err := c.ShouldBindJSON(&partialMovie); err != nil {
 		c.JSON(http.StatusBadRequest, model.ErrorResponse{
-			Message: err.Error(),
+			Message: ErrInvalidBody.Error(),
 		})
 		return
 	}
@@ -64,7 +82,7 @@ func (mh MovieHandler) PatchMovieHandler(c *gin.Context) {
 				existingMovie.Title = title
 			} else {
 				c.JSON(http.StatusBadRequest, model.ErrorResponse{
-					Message: "failed to assert type for field title",
+					Message: ErrAssertTitle.Error(),
 				})
 				return
 			}
@@ -74,13 +92,13 @@ func (mh MovieHandler) PatchMovieHandler(c *gin.Context) {
 					existingMovie.ReleaseDate = parsedReleaseDate
 				} else {
 					c.JSON(http.StatusBadRequest, model.ErrorResponse{
-						Message: "failed to assert type for field releaseDate",
+						Message: ErrAssertReleaseDate.Error(),
 					})
 					return
 				}
 			} else {
 				c.JSON(http.StatusBadRequest, model.ErrorResponse{
-					Message: "failed to assert type for field releaseDate",
+					Message: ErrAssertReleaseDate.Error(),
 				})
 				return
 			}
@@ -89,7 +107,7 @@ func (mh MovieHandler) PatchMovieHandler(c *gin.Context) {
 				existingMovie.Genre = genre
 			} else {
 				c.JSON(http.StatusBadRequest, model.ErrorResponse{
-					Message: "failed to assert type for field genre",
+					Message: ErrAssertGenre.Error(),
 				})
 				return
 			}
@@ -98,7 +116,7 @@ func (mh MovieHandler) PatchMovieHandler(c *gin.Context) {
 				existingMovie.Director = director
 			} else {
 				c.JSON(http.StatusBadRequest, model.ErrorResponse{
-					Message: "failed to assert type for field director",
+					Message: ErrAssertDirector.Error(),
 				})
 				return
 			}
@@ -107,7 +125,7 @@ func (mh MovieHandler) PatchMovieHandler(c *gin.Context) {
 				existingMovie.Description = description
 			} else {
 				c.JSON(http.StatusBadRequest, model.ErrorResponse{
-					Message: "failed to assert type for field description",
+					Message: ErrAssertDescription.Error(),
 				})
 				return
 			}
