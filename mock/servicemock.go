@@ -26,6 +26,8 @@ var (
 		Description: Movie.Description,
 		Rating:      3.5,
 	}
+
+	MovieIDToFail = "6ba7b810-9dad-11d1-80b4-00c04fd430c9"
 )
 
 type ErrMock int
@@ -89,6 +91,10 @@ func (s ServiceMock) GetMovies() ([]*model.Movie, error) {
 
 // AddMovie adds a movie to the database.
 func (s ServiceMock) AddMovie(movie model.Movie) error {
+	if movie.ID == MovieIDToFail {
+		return domain.ErrFailedAdd
+	}
+
 	if s.Err == AddMovieError {
 		return domain.ErrFailedAdd
 	}

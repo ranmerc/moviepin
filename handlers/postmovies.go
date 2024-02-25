@@ -1,11 +1,17 @@
 package handlers
 
 import (
+	"errors"
 	"moviepin/model"
 	"moviepin/utils"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+)
+
+var (
+	// ErrFailedAdd is returned when all movies failed to be added.
+	ErrFailedAdd = errors.New("failed to add movies")
 )
 
 // Adds list of movies sent in request.
@@ -68,9 +74,10 @@ func (mh MovieHandler) PostMoviesHandler(c *gin.Context) {
 		}
 	}
 
+	// When all movies failed to be added.
 	if len(response.FailedMovies) == len(req.Movies) {
 		c.JSON(http.StatusInternalServerError, model.ErrorResponse{
-			Message: "failed to add movies",
+			Message: ErrFailedAdd.Error(),
 		})
 		return
 	}
