@@ -76,6 +76,24 @@ func TestPutMovieHandler(t *testing.T) {
 				"message": "failed to update movie",
 			},
 		},
+		"invalid id": {
+			id:     "invalid",
+			err:    mock.OK,
+			status: http.StatusBadRequest,
+			body:   body,
+			resp: gin.H{
+				"message": "invalid id",
+			},
+		},
+		"invalid body": {
+			id:     mock.Movie.ID,
+			err:    mock.OK,
+			status: http.StatusBadRequest,
+			body:   gin.H{},
+			resp: gin.H{
+				"message": "invalid request body",
+			},
+		},
 	}
 
 	gin.SetMode(gin.TestMode)

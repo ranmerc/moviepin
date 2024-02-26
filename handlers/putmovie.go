@@ -15,14 +15,16 @@ func (mh MovieHandler) PutMovieHandler(c *gin.Context) {
 
 	if err := c.ShouldBindUri(&req); err != nil {
 		c.JSON(http.StatusBadRequest, model.ErrorResponse{
-			Message: err.Error(),
+			Message: ErrInvalidID.Error(),
 		})
 		return
 	}
 
 	if err := utils.Validate.Struct(req); err != nil {
+		utils.ErrorLogger.Print(err)
+
 		c.JSON(http.StatusBadRequest, model.ErrorResponse{
-			Message: err.Error(),
+			Message: ErrInvalidID.Error(),
 		})
 		return
 	}
@@ -31,14 +33,16 @@ func (mh MovieHandler) PutMovieHandler(c *gin.Context) {
 
 	if err := c.ShouldBindJSON(&movie); err != nil {
 		c.JSON(http.StatusBadRequest, model.ErrorResponse{
-			Message: err.Error(),
+			Message: ErrInvalidBody.Error(),
 		})
 		return
 	}
 
 	if err := utils.Validate.Struct(movie); err != nil {
+		utils.ErrorLogger.Print(err)
+
 		c.JSON(http.StatusBadRequest, model.ErrorResponse{
-			Message: err.Error(),
+			Message: ErrInvalidBody.Error(),
 		})
 		return
 	}
