@@ -57,7 +57,7 @@ func TestPatchMovieHandler(t *testing.T) {
 				},
 			},
 		},
-		"movie patch request not found when movie id is non-existent": {
+		"movie patch request not found when movie id is non-existent for get movie": {
 			id:     mock.Movie.ID,
 			err:    mock.GetMovieNotExistsError,
 			status: http.StatusNotFound,
@@ -66,13 +66,31 @@ func TestPatchMovieHandler(t *testing.T) {
 				"message": "movie not found",
 			},
 		},
-		"movies patch request failed when there is db error": {
+		"movies patch request failed when there is db error for get movie": {
 			id:     mock.Movie.ID,
 			err:    mock.GetMovieError,
 			status: http.StatusInternalServerError,
 			body:   body,
 			resp: gin.H{
 				"message": "failed to get movie",
+			},
+		},
+		"movie patch request not found when movie id is non-existent for update movie": {
+			id:     mock.Movie.ID,
+			err:    mock.UpdateMovieNotExistsError,
+			status: http.StatusNotFound,
+			body:   body,
+			resp: gin.H{
+				"message": "movie not found",
+			},
+		},
+		"movies patch request failed when there is db error for update movie": {
+			id:     mock.Movie.ID,
+			err:    mock.UpdateMovieError,
+			status: http.StatusInternalServerError,
+			body:   body,
+			resp: gin.H{
+				"message": "failed to update movie",
 			},
 		},
 		"movie patch request when movie movie id is invalid": {
