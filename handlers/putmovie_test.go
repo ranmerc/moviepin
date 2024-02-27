@@ -60,7 +60,7 @@ func TestPutMovieHandler(t *testing.T) {
 		},
 		"movie put request not found when movie id is non-existent": {
 			id:     mock.Movie.ID,
-			err:    mock.NotExistsError,
+			err:    mock.UpdateMovieNotExistsError,
 			status: http.StatusNotFound,
 			body:   body,
 			resp: gin.H{

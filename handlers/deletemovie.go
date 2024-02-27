@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"moviepin/domain"
 	"moviepin/model"
 	"moviepin/utils"
 	"net/http"
@@ -31,6 +32,11 @@ func (mh MovieHandler) DeleteMovieHandler(c *gin.Context) {
 	err := mh.domain.DeleteMovie(req.ID)
 
 	if err != nil {
+		if err == domain.ErrNotExists {
+			c.JSON(http.StatusNoContent, nil)
+			return
+		}
+
 		c.JSON(http.StatusInternalServerError, model.ErrorResponse{
 			Message: err.Error(),
 		})

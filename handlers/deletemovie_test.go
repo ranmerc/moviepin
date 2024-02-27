@@ -36,9 +36,9 @@ func TestDeleteMovieHandler(t *testing.T) {
 			status: http.StatusNoContent,
 			resp:   gin.H{},
 		},
-		"movie delete request not found when movie id is non-existent": {
+		"movie delete request successful when movie id is non-existent": {
 			id:     mock.Movie.ID,
-			err:    mock.NotExistsError,
+			err:    mock.DeleteMovieNotExistsError,
 			status: http.StatusNoContent,
 			resp:   gin.H{},
 		},

@@ -47,7 +47,7 @@ func TestGetMovieRatingHandler(t *testing.T) {
 		},
 		"movie rating get request not found when movie id is non-existent": {
 			id:     mock.Movie.ID,
-			err:    mock.NotExistsError,
+			err:    mock.GetMovieRatingNotExistsError,
 			status: http.StatusNotFound,
 			resp: gin.H{
 				"message": "movie does not exist",

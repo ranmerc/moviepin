@@ -48,7 +48,7 @@ func TestGetMovieHandler(t *testing.T) {
 		},
 		"movie get request failed when movie id is non existent": {
 			id:     mock.Movie.ID,
-			err:    mock.NotExistsError,
+			err:    mock.GetMovieNotExistsError,
 			status: http.StatusNotFound,
 			resp: gin.H{
 				"message": "movie does not exist",

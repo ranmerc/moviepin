@@ -59,7 +59,7 @@ func TestPatchMovieHandler(t *testing.T) {
 		},
 		"movie patch request not found when movie id is non-existent": {
 			id:     mock.Movie.ID,
-			err:    mock.NotExistsError,
+			err:    mock.GetMovieNotExistsError,
 			status: http.StatusNotFound,
 			body:   body,
 			resp: gin.H{
@@ -117,7 +117,7 @@ func TestPatchMovieHandler(t *testing.T) {
 				"message": "failed to assert type for field releaseDate",
 			},
 		},
-		"movie patch request when date in body is invalid": {
+		"movie patch request when genre in body is invalid": {
 			id:     mock.Movie.ID,
 			err:    mock.OK,
 			status: http.StatusBadRequest,

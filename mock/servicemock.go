@@ -8,6 +8,7 @@ import (
 )
 
 var (
+	// Movie is a mock movie.
 	Movie = model.Movie{
 		ID:          "6ba7b810-9dad-11d1-80b4-00c04fd430c8",
 		Title:       "The Shawshank Redemption",
@@ -17,6 +18,7 @@ var (
 		Description: "Prisoners",
 	}
 
+	// MovieReview is a mock movie review.
 	MovieReview = model.MovieReview{
 		ID:          Movie.ID,
 		Title:       Movie.Title,
@@ -27,21 +29,46 @@ var (
 		Rating:      3.5,
 	}
 
+	// MovieIDToFail is a mock movie id designed to fail for non-existence.
 	MovieIDToFail = "6ba7b810-9dad-11d1-80b4-00c04fd430c9"
 )
 
 type ErrMock int
 
 const (
+	// DBStatusError is a mock error for DBStatus.
 	DBStatusError ErrMock = iota
-	NotExistsError
+
+	// GetMoviesError is a mock error for GetMovies.
 	GetMoviesError
+
+	// GetMovieError is a mock error for GetMovie.
 	GetMovieError
+	// GetMovieNotExistsError is a mock error for GetMovie when movie id does not exist.
+	GetMovieNotExistsError
+
+	// AddMovieError is a mock error for AddMovie.
 	AddMovieError
+
+	// UpdateMovieError is a mock error for UpdateMovie.
 	UpdateMovieError
+	// UpdateMovieNotExistsError is a mock error for UpdateMovie when movie id does not exist.
+	UpdateMovieNotExistsError
+
+	// DeleteMovieError is a mock error for DeleteMovie.
 	DeleteMovieError
+	// DeleteMovieNotExistsError is a mock error for DeleteMovie when movie id does not exist.
+	DeleteMovieNotExistsError
+
+	// ReplaceMoviesError is a mock error for ReplaceMovies.
 	ReplaceMoviesError
+
+	// GetMovieRatingError is a mock error for GetMovieRating.
 	GetMovieRatingError
+	// GetMovieRatingNotExistsError is a mock error for GetMovieRating when movie id does not exist.
+	GetMovieRatingNotExistsError
+
+	// When there is no error. This is the default value.
 	OK
 )
 
@@ -51,7 +78,9 @@ type ServiceMock struct {
 }
 
 func NewServiceMock() ServiceMock {
-	return ServiceMock{}
+	return ServiceMock{
+		Err: OK,
+	}
 }
 
 // DBStatus is a mock implementation of DBStatus
@@ -65,7 +94,7 @@ func (s *ServiceMock) DBStatus() (bool, error) {
 
 // GetMovie returns a movie by its id.
 func (s ServiceMock) GetMovie(id string) (*model.Movie, error) {
-	if s.Err == NotExistsError {
+	if s.Err == GetMovieNotExistsError {
 		return nil, domain.ErrNotExists
 	}
 
@@ -78,10 +107,6 @@ func (s ServiceMock) GetMovie(id string) (*model.Movie, error) {
 
 // GetMovies returns a slice of all movies present.
 func (s ServiceMock) GetMovies() ([]*model.Movie, error) {
-	if s.Err == NotExistsError {
-		return nil, domain.ErrNotExists
-	}
-
 	if s.Err == GetMoviesError {
 		return nil, domain.ErrFailedGetMovies
 	}
@@ -104,7 +129,7 @@ func (s ServiceMock) AddMovie(movie model.Movie) error {
 
 // UpdateMovie updates a movie in the database.
 func (s ServiceMock) UpdateMovie(id string, movie model.Movie) error {
-	if s.Err == NotExistsError {
+	if s.Err == UpdateMovieNotExistsError {
 		return domain.ErrNotExists
 	}
 
@@ -117,6 +142,10 @@ func (s ServiceMock) UpdateMovie(id string, movie model.Movie) error {
 
 // DeleteMovie deletes a movie from the database.
 func (s ServiceMock) DeleteMovie(id string) error {
+	if s.Err == DeleteMovieNotExistsError {
+		return domain.ErrNotExists
+	}
+
 	if s.Err == DeleteMovieError {
 		return domain.ErrFailedDelete
 	}
@@ -135,7 +164,7 @@ func (s ServiceMock) ReplaceMovies(movies []model.Movie) error {
 
 // GetMovieRating returns a movie rating by its id.
 func (s ServiceMock) GetMovieRating(id string) (*model.MovieReview, error) {
-	if s.Err == NotExistsError {
+	if s.Err == GetMovieRatingNotExistsError {
 		return nil, domain.ErrNotExists
 	}
 
