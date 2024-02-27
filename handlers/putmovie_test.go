@@ -42,7 +42,7 @@ func TestPutMovieHandler(t *testing.T) {
 		body   gin.H
 		resp   gin.H
 	}{
-		"request is successful": {
+		"movie put request is successful": {
 			id:     mock.Movie.ID,
 			err:    mock.OK,
 			status: http.StatusOK,
@@ -58,7 +58,7 @@ func TestPutMovieHandler(t *testing.T) {
 				},
 			},
 		},
-		"not found": {
+		"movie put request not found when movie id is non-existent": {
 			id:     mock.Movie.ID,
 			err:    mock.NotExistsError,
 			status: http.StatusNotFound,
@@ -67,7 +67,7 @@ func TestPutMovieHandler(t *testing.T) {
 				"message": "movie does not exist",
 			},
 		},
-		"db error": {
+		"movie put request when there is db error": {
 			id:     mock.Movie.ID,
 			err:    mock.UpdateMovieError,
 			status: http.StatusInternalServerError,
@@ -76,7 +76,7 @@ func TestPutMovieHandler(t *testing.T) {
 				"message": "failed to update movie",
 			},
 		},
-		"invalid id": {
+		"movie put request when movie movie id is invalid": {
 			id:     "invalid",
 			err:    mock.OK,
 			status: http.StatusBadRequest,
@@ -85,7 +85,7 @@ func TestPutMovieHandler(t *testing.T) {
 				"message": "invalid id",
 			},
 		},
-		"invalid body": {
+		"movie put request when date in body is empty": {
 			id:     mock.Movie.ID,
 			err:    mock.OK,
 			status: http.StatusBadRequest,

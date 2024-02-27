@@ -30,7 +30,7 @@ func TestGetMoviesHandler(t *testing.T) {
 		status int
 		resp   gin.H
 	}{
-		"request is successful": {
+		"movies get request is successful": {
 			err:    mock.OK,
 			status: http.StatusOK,
 			resp: gin.H{
@@ -46,7 +46,7 @@ func TestGetMoviesHandler(t *testing.T) {
 				},
 			},
 		},
-		"db error": {
+		"movies get request failed when there is db error": {
 			err:    mock.GetMoviesError,
 			status: http.StatusInternalServerError,
 			resp: gin.H{

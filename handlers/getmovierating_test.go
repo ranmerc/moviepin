@@ -31,7 +31,7 @@ func TestGetMovieRatingHandler(t *testing.T) {
 		status int
 		resp   gin.H
 	}{
-		"request is successful": {
+		"movie rating get request is successful": {
 			id:     mock.Movie.ID,
 			err:    mock.OK,
 			status: http.StatusOK,
@@ -45,7 +45,7 @@ func TestGetMovieRatingHandler(t *testing.T) {
 				"rating":      mock.MovieReview.Rating,
 			},
 		},
-		"not found": {
+		"movie rating get request not found when movie id is non-existent": {
 			id:     mock.Movie.ID,
 			err:    mock.NotExistsError,
 			status: http.StatusNotFound,
@@ -53,7 +53,7 @@ func TestGetMovieRatingHandler(t *testing.T) {
 				"message": "movie does not exist",
 			},
 		},
-		"db error": {
+		"movie rating get request when there is db error": {
 			id:     mock.Movie.ID,
 			err:    mock.GetMovieRatingError,
 			status: http.StatusInternalServerError,
@@ -61,7 +61,7 @@ func TestGetMovieRatingHandler(t *testing.T) {
 				"message": "failed to get movie rating",
 			},
 		},
-		"invalid id": {
+		"movie rating get request when movie movie id is invalid": {
 			id:     "invalid",
 			err:    mock.OK,
 			status: http.StatusBadRequest,

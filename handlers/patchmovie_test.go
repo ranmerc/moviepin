@@ -41,7 +41,7 @@ func TestPatchMovieHandler(t *testing.T) {
 		body   gin.H
 		resp   gin.H
 	}{
-		"request is successful": {
+		"movie patch request request is successful": {
 			id:     mock.Movie.ID,
 			err:    mock.OK,
 			status: http.StatusOK,
@@ -57,7 +57,7 @@ func TestPatchMovieHandler(t *testing.T) {
 				},
 			},
 		},
-		"not found": {
+		"movie patch request not found when movie id is non-existent": {
 			id:     mock.Movie.ID,
 			err:    mock.NotExistsError,
 			status: http.StatusNotFound,
@@ -66,7 +66,7 @@ func TestPatchMovieHandler(t *testing.T) {
 				"message": "movie not found",
 			},
 		},
-		"db error": {
+		"movies patch request failed when there is db error": {
 			id:     mock.Movie.ID,
 			err:    mock.GetMovieError,
 			status: http.StatusInternalServerError,
@@ -75,7 +75,7 @@ func TestPatchMovieHandler(t *testing.T) {
 				"message": "failed to get movie",
 			},
 		},
-		"invalid id": {
+		"movie patch request when movie movie id is invalid": {
 			id:     "invalid",
 			err:    mock.OK,
 			status: http.StatusBadRequest,
@@ -84,7 +84,7 @@ func TestPatchMovieHandler(t *testing.T) {
 				"message": "invalid id",
 			},
 		},
-		"invalid title": {
+		"movie patch request when title in body is invalid": {
 			id:     mock.Movie.ID,
 			err:    mock.OK,
 			status: http.StatusBadRequest,
@@ -95,7 +95,7 @@ func TestPatchMovieHandler(t *testing.T) {
 				"message": "failed to assert type for field title",
 			},
 		},
-		"invalid release date format": {
+		"movie patch request when date in body has invalid format": {
 			id:     mock.Movie.ID,
 			err:    mock.OK,
 			status: http.StatusBadRequest,
@@ -106,7 +106,7 @@ func TestPatchMovieHandler(t *testing.T) {
 				"message": "failed to assert type for field releaseDate",
 			},
 		},
-		"invalid release date": {
+		"movie patch request when date in body is invalid": {
 			id:     mock.Movie.ID,
 			err:    mock.OK,
 			status: http.StatusBadRequest,
@@ -117,7 +117,7 @@ func TestPatchMovieHandler(t *testing.T) {
 				"message": "failed to assert type for field releaseDate",
 			},
 		},
-		"invalid genre": {
+		"movie patch request when date in body is invalid": {
 			id:     mock.Movie.ID,
 			err:    mock.OK,
 			status: http.StatusBadRequest,
@@ -128,7 +128,7 @@ func TestPatchMovieHandler(t *testing.T) {
 				"message": "failed to assert type for field genre",
 			},
 		},
-		"invalid director": {
+		"movie patch request when director in body is invalid": {
 			id:     mock.Movie.ID,
 			err:    mock.OK,
 			status: http.StatusBadRequest,
@@ -139,7 +139,7 @@ func TestPatchMovieHandler(t *testing.T) {
 				"message": "failed to assert type for field director",
 			},
 		},
-		"invalid description": {
+		"movie patch request when description in body is invalid": {
 			id:     mock.Movie.ID,
 			err:    mock.OK,
 			status: http.StatusBadRequest,

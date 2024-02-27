@@ -45,7 +45,7 @@ func TestPostMoviesHandler(t *testing.T) {
 		body   gin.H
 		resp   gin.H
 	}{
-		"all movies added": {
+		"movies post request when all movies are added": {
 			err:    mock.OK,
 			status: http.StatusCreated,
 			body:   body,
@@ -62,7 +62,7 @@ func TestPostMoviesHandler(t *testing.T) {
 				},
 			},
 		},
-		"all movies failed": {
+		"movies post request when all movies fail to get added": {
 			err:    mock.AddMovieError,
 			status: http.StatusInternalServerError,
 			body:   body,
@@ -70,7 +70,7 @@ func TestPostMoviesHandler(t *testing.T) {
 				"message": "failed to add movies",
 			},
 		},
-		"some movies failed": {
+		"movies post request when some movies are added": {
 			err:    mock.OK,
 			status: http.StatusMultiStatus,
 			body: gin.H{
@@ -116,7 +116,7 @@ func TestPostMoviesHandler(t *testing.T) {
 				},
 			},
 		},
-		"body is empty": {
+		"movies post request when request body is empty": {
 			err:    mock.OK,
 			status: http.StatusBadRequest,
 			body:   gin.H{},
@@ -124,7 +124,7 @@ func TestPostMoviesHandler(t *testing.T) {
 				"message": "invalid request body",
 			},
 		},
-		"no movies in request": {
+		"movies post request when there are no movies in request": {
 			err:    mock.OK,
 			status: http.StatusBadRequest,
 			body:   gin.H{"movies": []gin.H{}},

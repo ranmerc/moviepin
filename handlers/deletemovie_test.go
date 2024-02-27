@@ -30,19 +30,19 @@ func TestDeleteMovieHandler(t *testing.T) {
 		status int
 		resp   gin.H
 	}{
-		"request is successful": {
+		"movie delete request is successful": {
 			id:     mock.Movie.ID,
 			err:    mock.OK,
 			status: http.StatusNoContent,
 			resp:   gin.H{},
 		},
-		"not found": {
+		"movie delete request not found when movie id is non-existent": {
 			id:     mock.Movie.ID,
 			err:    mock.NotExistsError,
 			status: http.StatusNoContent,
 			resp:   gin.H{},
 		},
-		"db error": {
+		"movie delete request failed when there is db error": {
 			id:     mock.Movie.ID,
 			err:    mock.DeleteMovieError,
 			status: http.StatusInternalServerError,
@@ -50,7 +50,7 @@ func TestDeleteMovieHandler(t *testing.T) {
 				"message": "failed to delete movie",
 			},
 		},
-		"invalid id": {
+		"movie delete request failed when movie id is invalid": {
 			id:     "invalid",
 			err:    mock.OK,
 			status: http.StatusBadRequest,

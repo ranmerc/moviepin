@@ -45,7 +45,7 @@ func TestPutMoviesHandler(t *testing.T) {
 		body   gin.H
 		resp   gin.H
 	}{
-		"request is successful": {
+		"movies put request is successful": {
 			err:    mock.OK,
 			status: http.StatusNoContent,
 			body:   body,
@@ -60,7 +60,7 @@ func TestPutMoviesHandler(t *testing.T) {
 				},
 			},
 		},
-		"db error": {
+		"movies put request failed when there is db error": {
 			err:    mock.ReplaceMoviesError,
 			status: http.StatusInternalServerError,
 			body:   body,
@@ -68,7 +68,7 @@ func TestPutMoviesHandler(t *testing.T) {
 				"message": "failed to replace movies",
 			},
 		},
-		"invalid request body": {
+		"movies put request failed when request body is empty": {
 			err:    mock.OK,
 			status: http.StatusBadRequest,
 			body:   gin.H{},
@@ -76,7 +76,7 @@ func TestPutMoviesHandler(t *testing.T) {
 				"message": "invalid request body",
 			},
 		},
-		"no movies in request": {
+		"movies put request when there are no movies in request": {
 			err:    mock.OK,
 			status: http.StatusBadRequest,
 			body:   gin.H{"movies": []gin.H{}},

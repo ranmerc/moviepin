@@ -31,7 +31,7 @@ func TestGetMovieHandler(t *testing.T) {
 		status int
 		resp   gin.H
 	}{
-		"request is successful": {
+		"movie get request is successful": {
 			id:     mock.Movie.ID,
 			err:    mock.OK,
 			status: http.StatusOK,
@@ -46,7 +46,7 @@ func TestGetMovieHandler(t *testing.T) {
 				},
 			},
 		},
-		"not found": {
+		"movie get request failed when movie id is non existent": {
 			id:     mock.Movie.ID,
 			err:    mock.NotExistsError,
 			status: http.StatusNotFound,
@@ -54,7 +54,7 @@ func TestGetMovieHandler(t *testing.T) {
 				"message": "movie does not exist",
 			},
 		},
-		"db error": {
+		"movie get request failed when there is db error": {
 			id:     mock.Movie.ID,
 			err:    mock.GetMovieError,
 			status: http.StatusInternalServerError,
@@ -62,7 +62,7 @@ func TestGetMovieHandler(t *testing.T) {
 				"message": "failed to get movie",
 			},
 		},
-		"invalid id": {
+		"movie get request failed when movie id is invalid": {
 			id:     "invalid",
 			err:    mock.OK,
 			status: http.StatusBadRequest,
