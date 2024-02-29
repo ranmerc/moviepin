@@ -75,6 +75,18 @@ func NewRoutes(mh *handlers.MovieHandler) Routes {
 			Pattern:     "/movies/:movieID/rating",
 			HandlerFunc: mh.GetMovieRatingHandler,
 		},
+		Route{
+			Name:        "Login",
+			Method:      http.MethodPost,
+			Pattern:     "/login",
+			HandlerFunc: mh.LoginHandler,
+		},
+		Route{
+			Name:        "Sign Up",
+			Method:      http.MethodPost,
+			Pattern:     "/signup",
+			HandlerFunc: mh.SignUpHandler,
+		},
 	}
 }
 

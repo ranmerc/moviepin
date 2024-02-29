@@ -145,7 +145,6 @@ func (ms MovieService) GetMovie(id string) (*model.Movie, error) {
 	movie := &model.Movie{}
 
 	if err := row.Scan(&movie.ID, &movie.Title, &movie.ReleaseDate, &movie.Genre, &movie.Director, &movie.Description); err != nil {
-
 		if err == sql.ErrNoRows {
 			return nil, ErrNotExists
 		}

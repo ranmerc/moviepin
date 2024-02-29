@@ -174,3 +174,11 @@ func (s ServiceMock) GetMovieRating(id string) (*model.MovieReview, error) {
 
 	return &MovieReview, nil
 }
+
+func (s ServiceMock) RegisterUser(username, password string) error {
+	return nil
+}
+
+func (s ServiceMock) LoginUser(username, password string) error {
+	return nil
+}

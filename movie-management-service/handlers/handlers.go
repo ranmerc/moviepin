@@ -32,6 +32,9 @@ type Handler interface {
 	PutMoviesHandler(c *gin.Context)
 	PutMovieHandler(c *gin.Context)
 	GetMovieRatingHandler(c *gin.Context)
+
+	SignUpHandler(c *gin.Context)
+	LoginHandler(c *gin.Context)
 }
 
 // MovieHandler implements the Handler interface.

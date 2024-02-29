@@ -15,6 +15,9 @@ type Service interface {
 	DeleteMovie(id string) error
 	ReplaceMovies(movies []model.Movie) error
 	GetMovieRating(id string) (*model.MovieReview, error)
+
+	RegisterUser(username, password string) error
+	LoginUser(username, password string) error
 }
 
 // MovieService implements the Service interface.
