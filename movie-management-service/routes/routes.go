@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"moviepin/handlers"
+	"movie-management-service/handlers"
 	"net/http"
 
 	"github.com/gin-gonic/gin"

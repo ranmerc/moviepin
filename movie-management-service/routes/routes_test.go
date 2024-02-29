@@ -4,15 +4,15 @@ import (
 	"net/http"
 	"testing"
 
-	"moviepin/handlers"
-	"moviepin/mock"
+	"movie-management-service/handlers"
+	"movie-management-service/mock"
 )
 
 func TestNewRoutes(t *testing.T) {
 	mockService := &mock.ServiceMock{}
 
-	todoHandler := handlers.NewMovieHandler(mockService)
-	got := NewRoutes(todoHandler)
+	movieHandler := handlers.NewMovieHandler(mockService)
+	got := NewRoutes(movieHandler)
 
 	expectedRoutes := []struct {
 		Pattern string

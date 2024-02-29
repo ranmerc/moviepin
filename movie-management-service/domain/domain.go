@@ -2,7 +2,7 @@ package domain
 
 import (
 	"database/sql"
-	"moviepin/model"
+	"movie-management-service/model"
 )
 
 // Service is the interface that defines the movie service methods.

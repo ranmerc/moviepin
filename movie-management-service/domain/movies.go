@@ -5,8 +5,8 @@ import (
 	"errors"
 	"sync"
 
-	"moviepin/model"
-	"moviepin/utils"
+	"movie-management-service/model"
+	"movie-management-service/utils"
 )
 
 var (

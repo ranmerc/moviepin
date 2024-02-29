@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"moviepin/mock"
+	"movie-management-service/mock"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -13,60 +13,44 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func TestGetMovieRatingHandler(t *testing.T) {
+func TestGetMoviesHandler(t *testing.T) {
 	server := gin.New()
 
 	mockService := &mock.ServiceMock{}
 	handler := NewMovieHandler(mockService)
 
-	route := "/movies/:movieID/rating"
+	route := "/movies"
 	routeHttpMethod := http.MethodGet
 
-	server.Handle(routeHttpMethod, route, handler.GetMovieRatingHandler)
+	server.Handle(routeHttpMethod, route, handler.GetMoviesHandler)
 	httpServer := httptest.NewServer(server)
 
 	cases := map[string]struct {
-		id     string
 		err    mock.ErrMock
 		status int
 		resp   gin.H
 	}{
-		"movie rating get request is successful": {
-			id:     mock.Movie.ID,
+		"movies get request is successful": {
 			err:    mock.OK,
 			status: http.StatusOK,
 			resp: gin.H{
-				"ID":          mock.MovieReview.ID,
-				"title":       mock.MovieReview.Title,
-				"releaseDate": mock.MovieReview.ReleaseDate.Format(time.RFC3339),
-				"genre":       mock.MovieReview.Genre,
-				"director":    mock.MovieReview.Director,
-				"description": mock.MovieReview.Description,
-				"rating":      mock.MovieReview.Rating,
+				"movies": []gin.H{
+					{
+						"ID":          mock.Movie.ID,
+						"title":       mock.Movie.Title,
+						"releaseDate": mock.Movie.ReleaseDate.Format(time.RFC3339),
+						"genre":       mock.Movie.Genre,
+						"director":    mock.Movie.Director,
+						"description": mock.Movie.Description,
+					},
+				},
 			},
 		},
-		"movie rating get request not found when movie id is non-existent": {
-			id:     mock.Movie.ID,
-			err:    mock.GetMovieRatingNotExistsError,
-			status: http.StatusNotFound,
-			resp: gin.H{
-				"message": "movie does not exist",
-			},
-		},
-		"movie rating get request when there is db error": {
-			id:     mock.Movie.ID,
-			err:    mock.GetMovieRatingError,
+		"movies get request failed when there is db error": {
+			err:    mock.GetMoviesError,
 			status: http.StatusInternalServerError,
 			resp: gin.H{
-				"message": "failed to get movie rating",
-			},
-		},
-		"movie rating get request when movie movie id is invalid": {
-			id:     "invalid",
-			err:    mock.OK,
-			status: http.StatusBadRequest,
-			resp: gin.H{
-				"message": "invalid id",
+				"message": "failed to get movies",
 			},
 		},
 	}
@@ -82,7 +66,7 @@ func TestGetMovieRatingHandler(t *testing.T) {
 			}
 
 			client := http.Client{}
-			requestURL := httpServer.URL + fmt.Sprintf("/movies/%s/rating", v.id)
+			requestURL := httpServer.URL + route
 			req, err := http.NewRequest(routeHttpMethod, requestURL, nil)
 			if err != nil {
 				t.Error("unexpected error: ", err)

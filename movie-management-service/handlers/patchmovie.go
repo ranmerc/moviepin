@@ -2,9 +2,9 @@ package handlers
 
 import (
 	"errors"
-	"moviepin/domain"
-	"moviepin/model"
-	"moviepin/utils"
+	"movie-management-service/domain"
+	"movie-management-service/model"
+	"movie-management-service/utils"
 	"net/http"
 	"time"
 

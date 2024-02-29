@@ -1,4 +1,4 @@
-module moviepin
+module movie-management-service
 
 go 1.21.7
 

@@ -4,9 +4,9 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
-	"moviepin/domain"
-	"moviepin/handlers"
-	"moviepin/routes"
+	"movie-management-service/domain"
+	"movie-management-service/handlers"
+	"movie-management-service/routes"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/lib/pq"
@@ -45,8 +45,8 @@ func main() {
 
 	movieService := domain.NewMovieService(db)
 
-	todoHandler := handlers.NewMovieHandler(movieService)
-	apiRoutes := routes.NewRoutes(todoHandler)
+	movieHandler := handlers.NewMovieHandler(movieService)
+	apiRoutes := routes.NewRoutes(movieHandler)
 	routes.AttachRoutes(server, apiRoutes)
 
 	server.Run(":4545")

@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"moviepin/model"
+	"movie-management-service/model"
 	"net/http"
 
 	"github.com/gin-gonic/gin"

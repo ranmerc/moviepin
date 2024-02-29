@@ -2,8 +2,8 @@ package mock
 
 import (
 	"errors"
-	"moviepin/domain"
-	"moviepin/model"
+	"movie-management-service/domain"
+	"movie-management-service/model"
 	"time"
 )
 

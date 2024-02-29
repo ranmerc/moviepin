@@ -2,7 +2,7 @@ package handlers
 
 import (
 	"errors"
-	"moviepin/domain"
+	"movie-management-service/domain"
 
 	"github.com/gin-gonic/gin"
 )

@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"moviepin/mock"
+	"movie-management-service/mock"
 	"net/http"
 	"net/http/httptest"
 	"testing"

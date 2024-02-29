@@ -1,6 +1,6 @@
 package domain
 
-import "moviepin/utils"
+import "movie-management-service/utils"
 
 // DBStatus returns DB connection status.
 func (ms *MovieService) DBStatus() (bool, error) {

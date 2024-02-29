@@ -1,16 +1,16 @@
 package handlers
 
 import (
-	"moviepin/domain"
-	"moviepin/model"
-	"moviepin/utils"
+	"movie-management-service/domain"
+	"movie-management-service/model"
+	"movie-management-service/utils"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
-// Responds with movie details along with its rating.
-func (mh MovieHandler) GetMovieRatingHandler(c *gin.Context) {
+// Deletes a particular movie.
+func (mh MovieHandler) DeleteMovieHandler(c *gin.Context) {
 	var req model.MovieRequestUri
 
 	if err := c.ShouldBindUri(&req); err != nil {
@@ -29,13 +29,11 @@ func (mh MovieHandler) GetMovieRatingHandler(c *gin.Context) {
 		return
 	}
 
-	review, err := mh.domain.GetMovieRating(req.ID)
+	err := mh.domain.DeleteMovie(req.ID)
 
 	if err != nil {
 		if err == domain.ErrNotExists {
-			c.JSON(http.StatusNotFound, model.ErrorResponse{
-				Message: err.Error(),
-			})
+			c.JSON(http.StatusNoContent, nil)
 			return
 		}
 
@@ -45,5 +43,5 @@ func (mh MovieHandler) GetMovieRatingHandler(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, review)
+	c.JSON(http.StatusNoContent, nil)
 }

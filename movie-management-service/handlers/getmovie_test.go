@@ -4,24 +4,25 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"moviepin/mock"
+	"movie-management-service/mock"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
 
-func TestDeleteMovieHandler(t *testing.T) {
+func TestGetMovieHandler(t *testing.T) {
 	server := gin.New()
 	mockService := &mock.ServiceMock{}
 
 	handler := NewMovieHandler(mockService)
 
 	route := "/movies/:movieID"
-	routeHttpMethod := http.MethodDelete
+	routeHttpMethod := http.MethodGet
 
-	server.Handle(routeHttpMethod, route, handler.DeleteMovieHandler)
+	server.Handle(routeHttpMethod, route, handler.GetMovieHandler)
 	httpServer := httptest.NewServer(server)
 
 	cases := map[string]struct {
@@ -30,27 +31,38 @@ func TestDeleteMovieHandler(t *testing.T) {
 		status int
 		resp   gin.H
 	}{
-		"movie delete request is successful": {
+		"movie get request is successful": {
 			id:     mock.Movie.ID,
 			err:    mock.OK,
-			status: http.StatusNoContent,
-			resp:   gin.H{},
-		},
-		"movie delete request successful when movie id is non-existent": {
-			id:     mock.Movie.ID,
-			err:    mock.DeleteMovieNotExistsError,
-			status: http.StatusNoContent,
-			resp:   gin.H{},
-		},
-		"movie delete request failed when there is db error": {
-			id:     mock.Movie.ID,
-			err:    mock.DeleteMovieError,
-			status: http.StatusInternalServerError,
+			status: http.StatusOK,
 			resp: gin.H{
-				"message": "failed to delete movie",
+				"movie": gin.H{
+					"ID":          mock.Movie.ID,
+					"title":       mock.Movie.Title,
+					"releaseDate": mock.Movie.ReleaseDate.Format(time.RFC3339),
+					"genre":       mock.Movie.Genre,
+					"director":    mock.Movie.Director,
+					"description": mock.Movie.Description,
+				},
 			},
 		},
-		"movie delete request failed when movie id is invalid": {
+		"movie get request failed when movie id is non existent": {
+			id:     mock.Movie.ID,
+			err:    mock.GetMovieNotExistsError,
+			status: http.StatusNotFound,
+			resp: gin.H{
+				"message": "movie does not exist",
+			},
+		},
+		"movie get request failed when there is db error": {
+			id:     mock.Movie.ID,
+			err:    mock.GetMovieError,
+			status: http.StatusInternalServerError,
+			resp: gin.H{
+				"message": "failed to get movie",
+			},
+		},
+		"movie get request failed when movie id is invalid": {
 			id:     "invalid",
 			err:    mock.OK,
 			status: http.StatusBadRequest,
@@ -82,15 +94,6 @@ func TestDeleteMovieHandler(t *testing.T) {
 				t.Error("unexpected error: ", err)
 			}
 
-			if status := res.StatusCode; status != v.status {
-				t.Errorf("handler returned wrong status code: \ngot %v\nwant %v\n", status, v.status)
-			}
-
-			// No need to check the body if the status code is 204
-			if v.status == http.StatusNoContent {
-				return
-			}
-
 			body, err := io.ReadAll(res.Body)
 			if err != nil {
 				t.Error("unexpected error: ", err)
@@ -100,6 +103,10 @@ func TestDeleteMovieHandler(t *testing.T) {
 			err = json.Unmarshal(body, &got)
 			if err != nil {
 				t.Fatal(err)
+			}
+
+			if status := res.StatusCode; status != v.status {
+				t.Errorf("handler returned wrong status code: \ngot %v\nwant %v\n", status, v.status)
 			}
 
 			if fmt.Sprint(v.resp) != fmt.Sprint(got) {

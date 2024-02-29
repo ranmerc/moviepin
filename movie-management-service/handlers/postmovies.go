@@ -2,8 +2,8 @@ package handlers
 
 import (
 	"errors"
-	"moviepin/model"
-	"moviepin/utils"
+	"movie-management-service/model"
+	"movie-management-service/utils"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
