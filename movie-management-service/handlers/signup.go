@@ -16,7 +16,7 @@ func (mh MovieHandler) SignUpHandler(c *gin.Context) {
 	req.Password = c.PostForm("password")
 
 	if err := utils.Validate.Struct(req); err != nil {
-		c.JSON(http.StatusBadRequest, model.ErrorResponse{
+		c.JSON(http.StatusBadRequest, model.DefaultResponse{
 			Message: err.Error(),
 		})
 		return
@@ -24,16 +24,18 @@ func (mh MovieHandler) SignUpHandler(c *gin.Context) {
 
 	if err := mh.domain.RegisterUser(req.Username, req.Password); err != nil {
 		if err == domain.ErrUsernameExists {
-			c.JSON(http.StatusConflict, model.ErrorResponse{
+			c.JSON(http.StatusConflict, model.DefaultResponse{
 				Message: err.Error(),
 			})
 			return
 		}
 
-		c.JSON(http.StatusInternalServerError, model.ErrorResponse{
+		c.JSON(http.StatusInternalServerError, model.DefaultResponse{
 			Message: err.Error(),
 		})
 	} else {
-		c.JSON(http.StatusOK, gin.H{"message": "sign-up successful"})
+		c.JSON(http.StatusOK, model.DefaultResponse{
+			Message: "user registered successfully",
+		})
 	}
 }

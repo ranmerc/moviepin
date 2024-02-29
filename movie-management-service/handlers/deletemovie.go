@@ -14,7 +14,7 @@ func (mh MovieHandler) DeleteMovieHandler(c *gin.Context) {
 	var req model.MovieRequestUri
 
 	if err := c.ShouldBindUri(&req); err != nil {
-		c.JSON(http.StatusBadRequest, model.ErrorResponse{
+		c.JSON(http.StatusBadRequest, model.DefaultResponse{
 			Message: ErrIDRequired.Error(),
 		})
 		return
@@ -23,7 +23,7 @@ func (mh MovieHandler) DeleteMovieHandler(c *gin.Context) {
 	if err := utils.Validate.Struct(req); err != nil {
 		utils.ErrorLogger.Print(err)
 
-		c.JSON(http.StatusBadRequest, model.ErrorResponse{
+		c.JSON(http.StatusBadRequest, model.DefaultResponse{
 			Message: ErrInvalidID.Error(),
 		})
 		return
@@ -37,7 +37,7 @@ func (mh MovieHandler) DeleteMovieHandler(c *gin.Context) {
 			return
 		}
 
-		c.JSON(http.StatusInternalServerError, model.ErrorResponse{
+		c.JSON(http.StatusInternalServerError, model.DefaultResponse{
 			Message: err.Error(),
 		})
 		return

@@ -21,17 +21,19 @@ func (mh MovieHandler) LoginHandler(c *gin.Context) {
 	req.Password = c.PostForm("password")
 
 	if err := utils.Validate.Struct(req); err != nil {
-		c.JSON(http.StatusBadRequest, model.ErrorResponse{
+		c.JSON(http.StatusBadRequest, model.DefaultResponse{
 			Message: err.Error(),
 		})
 		return
 	}
 
 	if err := mh.domain.LoginUser(req.Username, req.Password); err != nil {
-		c.JSON(http.StatusUnauthorized, model.ErrorResponse{
+		c.JSON(http.StatusUnauthorized, model.DefaultResponse{
 			Message: ErrInvalidCredentials.Error(),
 		})
 	} else {
-		c.JSON(http.StatusOK, gin.H{"message": "login successful"})
+		c.JSON(http.StatusOK, model.DefaultResponse{
+			Message: "login successful",
+		})
 	}
 }

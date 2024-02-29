@@ -14,7 +14,7 @@ func (mh MovieHandler) PutMovieHandler(c *gin.Context) {
 	var req model.MovieRequestUri
 
 	if err := c.ShouldBindUri(&req); err != nil {
-		c.JSON(http.StatusBadRequest, model.ErrorResponse{
+		c.JSON(http.StatusBadRequest, model.DefaultResponse{
 			Message: ErrInvalidID.Error(),
 		})
 		return
@@ -23,7 +23,7 @@ func (mh MovieHandler) PutMovieHandler(c *gin.Context) {
 	if err := utils.Validate.Struct(req); err != nil {
 		utils.ErrorLogger.Print(err)
 
-		c.JSON(http.StatusBadRequest, model.ErrorResponse{
+		c.JSON(http.StatusBadRequest, model.DefaultResponse{
 			Message: ErrInvalidID.Error(),
 		})
 		return
@@ -32,7 +32,7 @@ func (mh MovieHandler) PutMovieHandler(c *gin.Context) {
 	var movie model.Movie
 
 	if err := c.ShouldBindJSON(&movie); err != nil {
-		c.JSON(http.StatusBadRequest, model.ErrorResponse{
+		c.JSON(http.StatusBadRequest, model.DefaultResponse{
 			Message: ErrInvalidBody.Error(),
 		})
 		return
@@ -41,7 +41,7 @@ func (mh MovieHandler) PutMovieHandler(c *gin.Context) {
 	if err := utils.Validate.Struct(movie); err != nil {
 		utils.ErrorLogger.Print(err)
 
-		c.JSON(http.StatusBadRequest, model.ErrorResponse{
+		c.JSON(http.StatusBadRequest, model.DefaultResponse{
 			Message: ErrInvalidBody.Error(),
 		})
 		return
@@ -51,13 +51,13 @@ func (mh MovieHandler) PutMovieHandler(c *gin.Context) {
 
 	if err != nil {
 		if err == domain.ErrNotExists {
-			c.JSON(http.StatusNotFound, model.ErrorResponse{
+			c.JSON(http.StatusNotFound, model.DefaultResponse{
 				Message: err.Error(),
 			})
 			return
 		}
 
-		c.JSON(http.StatusInternalServerError, model.ErrorResponse{
+		c.JSON(http.StatusInternalServerError, model.DefaultResponse{
 			Message: err.Error(),
 		})
 		return

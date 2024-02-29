@@ -33,7 +33,7 @@ func (mh MovieHandler) PatchMovieHandler(c *gin.Context) {
 	var req model.MovieRequestUri
 
 	if err := c.ShouldBindUri(&req); err != nil {
-		c.JSON(http.StatusBadRequest, model.ErrorResponse{
+		c.JSON(http.StatusBadRequest, model.DefaultResponse{
 			Message: ErrIDRequired.Error(),
 		})
 		return
@@ -42,7 +42,7 @@ func (mh MovieHandler) PatchMovieHandler(c *gin.Context) {
 	if err := utils.Validate.Struct(req); err != nil {
 		utils.ErrorLogger.Print(err)
 
-		c.JSON(http.StatusBadRequest, model.ErrorResponse{
+		c.JSON(http.StatusBadRequest, model.DefaultResponse{
 			Message: ErrInvalidID.Error(),
 		})
 		return
@@ -52,7 +52,7 @@ func (mh MovieHandler) PatchMovieHandler(c *gin.Context) {
 	var partialMovie map[string]interface{}
 
 	if err := c.ShouldBindJSON(&partialMovie); err != nil {
-		c.JSON(http.StatusBadRequest, model.ErrorResponse{
+		c.JSON(http.StatusBadRequest, model.DefaultResponse{
 			Message: ErrInvalidBody.Error(),
 		})
 		return
@@ -62,13 +62,13 @@ func (mh MovieHandler) PatchMovieHandler(c *gin.Context) {
 
 	if err != nil {
 		if err == domain.ErrNotExists {
-			c.JSON(http.StatusNotFound, model.ErrorResponse{
+			c.JSON(http.StatusNotFound, model.DefaultResponse{
 				Message: "movie not found",
 			})
 			return
 		}
 
-		c.JSON(http.StatusInternalServerError, model.ErrorResponse{
+		c.JSON(http.StatusInternalServerError, model.DefaultResponse{
 			Message: err.Error(),
 		})
 		return
@@ -81,7 +81,7 @@ func (mh MovieHandler) PatchMovieHandler(c *gin.Context) {
 			if title, ok := value.(string); ok {
 				existingMovie.Title = title
 			} else {
-				c.JSON(http.StatusBadRequest, model.ErrorResponse{
+				c.JSON(http.StatusBadRequest, model.DefaultResponse{
 					Message: ErrAssertTitle.Error(),
 				})
 				return
@@ -91,13 +91,13 @@ func (mh MovieHandler) PatchMovieHandler(c *gin.Context) {
 				if parsedReleaseDate, err := time.Parse(time.RFC3339, releaseDate); err == nil {
 					existingMovie.ReleaseDate = parsedReleaseDate
 				} else {
-					c.JSON(http.StatusBadRequest, model.ErrorResponse{
+					c.JSON(http.StatusBadRequest, model.DefaultResponse{
 						Message: ErrAssertReleaseDate.Error(),
 					})
 					return
 				}
 			} else {
-				c.JSON(http.StatusBadRequest, model.ErrorResponse{
+				c.JSON(http.StatusBadRequest, model.DefaultResponse{
 					Message: ErrAssertReleaseDate.Error(),
 				})
 				return
@@ -106,7 +106,7 @@ func (mh MovieHandler) PatchMovieHandler(c *gin.Context) {
 			if genre, ok := value.(string); ok {
 				existingMovie.Genre = genre
 			} else {
-				c.JSON(http.StatusBadRequest, model.ErrorResponse{
+				c.JSON(http.StatusBadRequest, model.DefaultResponse{
 					Message: ErrAssertGenre.Error(),
 				})
 				return
@@ -115,7 +115,7 @@ func (mh MovieHandler) PatchMovieHandler(c *gin.Context) {
 			if director, ok := value.(string); ok {
 				existingMovie.Director = director
 			} else {
-				c.JSON(http.StatusBadRequest, model.ErrorResponse{
+				c.JSON(http.StatusBadRequest, model.DefaultResponse{
 					Message: ErrAssertDirector.Error(),
 				})
 				return
@@ -124,7 +124,7 @@ func (mh MovieHandler) PatchMovieHandler(c *gin.Context) {
 			if description, ok := value.(string); ok {
 				existingMovie.Description = description
 			} else {
-				c.JSON(http.StatusBadRequest, model.ErrorResponse{
+				c.JSON(http.StatusBadRequest, model.DefaultResponse{
 					Message: ErrAssertDescription.Error(),
 				})
 				return
@@ -134,7 +134,7 @@ func (mh MovieHandler) PatchMovieHandler(c *gin.Context) {
 
 	// Validate updated movie.
 	if err := utils.Validate.Struct(existingMovie); err != nil {
-		c.JSON(http.StatusBadRequest, model.ErrorResponse{
+		c.JSON(http.StatusBadRequest, model.DefaultResponse{
 			Message: err.Error(),
 		})
 		return
@@ -144,13 +144,13 @@ func (mh MovieHandler) PatchMovieHandler(c *gin.Context) {
 
 	if err != nil {
 		if err == domain.ErrNotExists {
-			c.JSON(http.StatusNotFound, model.ErrorResponse{
+			c.JSON(http.StatusNotFound, model.DefaultResponse{
 				Message: "movie not found",
 			})
 			return
 		}
 
-		c.JSON(http.StatusInternalServerError, model.ErrorResponse{
+		c.JSON(http.StatusInternalServerError, model.DefaultResponse{
 			Message: err.Error(),
 		})
 		return

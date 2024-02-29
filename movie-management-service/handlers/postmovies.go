@@ -19,7 +19,7 @@ func (mh MovieHandler) PostMoviesHandler(c *gin.Context) {
 	var req model.MoviesRequestBody
 
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, model.ErrorResponse{
+		c.JSON(http.StatusBadRequest, model.DefaultResponse{
 			Message: ErrInvalidBody.Error(),
 		})
 		return
@@ -28,7 +28,7 @@ func (mh MovieHandler) PostMoviesHandler(c *gin.Context) {
 	if err := utils.Validate.Struct(req); err != nil {
 		utils.ErrorLogger.Print(err)
 
-		c.JSON(http.StatusBadRequest, model.ErrorResponse{
+		c.JSON(http.StatusBadRequest, model.DefaultResponse{
 			Message: ErrInvalidBody.Error(),
 		})
 		return
@@ -36,7 +36,7 @@ func (mh MovieHandler) PostMoviesHandler(c *gin.Context) {
 
 	// If no movies are sent in request.
 	if len(req.Movies) == 0 {
-		c.JSON(http.StatusBadRequest, model.ErrorResponse{
+		c.JSON(http.StatusBadRequest, model.DefaultResponse{
 			Message: ErrEmptyBody.Error(),
 		})
 		return
@@ -86,7 +86,7 @@ func (mh MovieHandler) PostMoviesHandler(c *gin.Context) {
 
 	// When all movies failed to be added.
 	if len(response.FailedMovies) == len(req.Movies) {
-		c.JSON(http.StatusInternalServerError, model.ErrorResponse{
+		c.JSON(http.StatusInternalServerError, model.DefaultResponse{
 			Message: ErrFailedAdd.Error(),
 		})
 		return

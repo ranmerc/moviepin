@@ -1,5 +1,5 @@
 package model
 
-type ErrorResponse struct {
+type DefaultResponse struct {
 	Message string `json:"message"`
 }

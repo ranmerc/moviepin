@@ -12,7 +12,7 @@ func (mh MovieHandler) GetMoviesHandler(c *gin.Context) {
 	movies, err := mh.domain.GetMovies()
 
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, model.ErrorResponse{
+		c.JSON(http.StatusInternalServerError, model.DefaultResponse{
 			Message: err.Error(),
 		})
 		return
