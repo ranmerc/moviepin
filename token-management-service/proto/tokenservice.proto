@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package token;
+
+option go_package = "./tokenpb";
+
+message GenerateTokenRequest {
+    string username = 1;
+}
+
+message GenerateTokenResponse {
+    string token = 1;
+}
+
+message VerifyTokenRequest {
+    string token = 1;
+}
+
+message VerifyTokenResponse {
+    bool valid = 1;
+    string username = 2;
+}
+
+service TokenService {
+    rpc GenerateToken (GenerateTokenRequest) returns (GenerateTokenResponse);
+    rpc VerifyToken (VerifyTokenRequest) returns (VerifyTokenResponse);
+}
