@@ -3,6 +3,7 @@ package handlers
 import (
 	"errors"
 	"movie-management-service/domain"
+	"movie-management-service/grpcclient"
 
 	"github.com/gin-gonic/gin"
 )
@@ -33,17 +34,19 @@ type Handler interface {
 	PutMovieHandler(c *gin.Context)
 	GetMovieRatingHandler(c *gin.Context)
 
-	SignUpHandler(c *gin.Context)
+	RegisterHandler(c *gin.Context)
 	LoginHandler(c *gin.Context)
 }
 
 // MovieHandler implements the Handler interface.
 type MovieHandler struct {
-	domain domain.Service
+	domain      domain.Service
+	tokenClient grpcclient.TokenServiceGRPCClient
 }
 
-func NewMovieHandler(domain domain.Service) *MovieHandler {
+func NewMovieHandler(domain domain.Service, tokenClient grpcclient.TokenServiceGRPCClient) *MovieHandler {
 	return &MovieHandler{
-		domain: domain,
+		domain:      domain,
+		tokenClient: tokenClient,
 	}
 }

@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"movie-management-service/grpcclient"
 	"movie-management-service/mock"
 	"net/http"
 	"net/http/httptest"
@@ -14,9 +15,11 @@ import (
 
 func TestHealthCheckHandler(t *testing.T) {
 	server := gin.New()
+	mockClient := mock.NewTokenClientMock(mock.OK)
+	tokenClient := grpcclient.NewTokenServiceClient(mockClient)
 
 	mockService := &mock.ServiceMock{}
-	handler := NewMovieHandler(mockService)
+	handler := NewMovieHandler(mockService, tokenClient)
 
 	route := "/health"
 	routeHttpMethod := http.MethodGet

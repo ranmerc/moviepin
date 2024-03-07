@@ -68,6 +68,16 @@ const (
 	// GetMovieRatingNotExistsError is a mock error for GetMovieRating when movie id does not exist.
 	GetMovieRatingNotExistsError
 
+	// LoginUserError is a mock error for LoginUser.
+	LoginUserError
+	// InvalidCredentialsError is a mock error for LoginUser when login credentials are invalid.
+	InvalidCredentialsError
+
+	// RegisterUserError is a mock error for RegisterUser.
+	RegisterUserError
+	// UserExistsError is a mock error for RegisterUser when user already exists.
+	UserExistsError
+
 	// When there is no error. This is the default value.
 	OK
 )
@@ -176,9 +186,25 @@ func (s ServiceMock) GetMovieRating(id string) (*model.MovieReview, error) {
 }
 
 func (s ServiceMock) RegisterUser(username, password string) error {
+	if s.Err == UserExistsError {
+		return domain.ErrUsernameExists
+	}
+
+	if s.Err == RegisterUserError {
+		return domain.ErrFailedRegister
+	}
+
 	return nil
 }
 
 func (s ServiceMock) LoginUser(username, password string) error {
+	if s.Err == InvalidCredentialsError {
+		return domain.ErrInvalidCredentials
+	}
+
+	if s.Err == LoginUserError {
+		return domain.ErrFailedLogin
+	}
+
 	return nil
 }

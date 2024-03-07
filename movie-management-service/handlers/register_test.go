@@ -1,76 +1,78 @@
 package handlers
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io"
+	"movie-management-service/domain"
 	"movie-management-service/grpcclient"
 	"movie-management-service/mock"
 	"net/http"
 	"net/http/httptest"
 	"testing"
-	"time"
 
 	"github.com/gin-gonic/gin"
 )
 
-func TestGetMovieHandler(t *testing.T) {
+func TestRegisterHandler(t *testing.T) {
 	server := gin.New()
-	mockService := &mock.ServiceMock{}
 	mockClient := mock.NewTokenClientMock(mock.OK)
 	tokenClient := grpcclient.NewTokenServiceClient(mockClient)
 
-	handler := NewMovieHandler(mockService, tokenClient)
+	mockService := mock.NewServiceMock()
+	handler := NewMovieHandler(&mockService, tokenClient)
 
-	route := "/movies/:movieID"
-	routeHttpMethod := http.MethodGet
+	route := "/register"
+	routeHttpMethod := http.MethodPost
 
-	server.Handle(routeHttpMethod, route, handler.GetMovieHandler)
+	server.Handle(routeHttpMethod, route, handler.RegisterHandler)
 	httpServer := httptest.NewServer(server)
 
 	cases := map[string]struct {
-		id     string
 		err    mock.ErrMock
 		status int
+		req    string
 		resp   gin.H
 	}{
-		"movie get request is successful": {
-			id:     mock.Movie.ID,
+		"singup request is successful": {
 			err:    mock.OK,
 			status: http.StatusOK,
+			req:    "username=username&password=password",
 			resp: gin.H{
-				"movie": gin.H{
-					"ID":          mock.Movie.ID,
-					"title":       mock.Movie.Title,
-					"releaseDate": mock.Movie.ReleaseDate.Format(time.RFC3339),
-					"genre":       mock.Movie.Genre,
-					"director":    mock.Movie.Director,
-					"description": mock.Movie.Description,
-				},
+				"message": "user registered successfully",
 			},
 		},
-		"movie get request failed when movie id is non existent": {
-			id:     mock.Movie.ID,
-			err:    mock.GetMovieNotExistsError,
-			status: http.StatusNotFound,
+		"singup request failed when username already exists": {
+			err:    mock.UserExistsError,
+			status: http.StatusConflict,
+			req:    "username=username&password=password",
 			resp: gin.H{
-				"message": "movie does not exist",
+				"message": domain.ErrUsernameExists.Error(),
 			},
 		},
-		"movie get request failed when there is db error": {
-			id:     mock.Movie.ID,
-			err:    mock.GetMovieError,
+		"singup request failed when db error occurs": {
+			err:    mock.RegisterUserError,
 			status: http.StatusInternalServerError,
+			req:    "username=username&password=password",
 			resp: gin.H{
-				"message": "failed to get movie",
+				"message": domain.ErrFailedRegister.Error(),
 			},
 		},
-		"movie get request failed when movie id is invalid": {
-			id:     "invalid",
+		"singup request failed when username is too short": {
 			err:    mock.OK,
 			status: http.StatusBadRequest,
+			req:    "username=user&password=password",
 			resp: gin.H{
-				"message": "invalid id",
+				"message": "invalid request body",
+			},
+		},
+		"singup request failed when password is too short": {
+			err:    mock.OK,
+			status: http.StatusBadRequest,
+			req:    "username=username&password=pass",
+			resp: gin.H{
+				"message": "invalid request body",
 			},
 		},
 	}
@@ -79,18 +81,18 @@ func TestGetMovieHandler(t *testing.T) {
 
 	for k, v := range cases {
 		t.Run(k, func(t *testing.T) {
-			if v.err != mock.OK {
-				mockService.Err = v.err
-			} else {
-				mockService.Err = mock.OK
-			}
+			mockService.Err = v.err
 
 			client := http.Client{}
-			requestURL := httpServer.URL + fmt.Sprintf("/movies/%s", v.id)
-			req, err := http.NewRequest(routeHttpMethod, requestURL, nil)
+			requestURL := httpServer.URL + route
+
+			reqBody := bytes.NewBufferString(v.req)
+			req, err := http.NewRequest(routeHttpMethod, requestURL, reqBody)
 			if err != nil {
 				t.Error("unexpected error: ", err)
 			}
+
+			req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 
 			res, err := client.Do(req)
 			if err != nil {

@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"movie-management-service/grpcclient"
 	"movie-management-service/mock"
 	"net/http"
 	"net/http/httptest"
@@ -15,8 +16,10 @@ import (
 func TestDeleteMovieHandler(t *testing.T) {
 	server := gin.New()
 	mockService := &mock.ServiceMock{}
+	mockClient := mock.NewTokenClientMock(mock.OK)
+	tokenClient := grpcclient.NewTokenServiceClient(mockClient)
 
-	handler := NewMovieHandler(mockService)
+	handler := NewMovieHandler(mockService, tokenClient)
 
 	route := "/movies/:movieID"
 	routeHttpMethod := http.MethodDelete

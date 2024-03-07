@@ -9,15 +9,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// Handles user sign-up
-func (mh MovieHandler) SignUpHandler(c *gin.Context) {
+// RegisterHandler handles user registrations.
+func (mh MovieHandler) RegisterHandler(c *gin.Context) {
 	var req model.AuthRequest
 	req.Username = c.PostForm("username")
 	req.Password = c.PostForm("password")
 
 	if err := utils.Validate.Struct(req); err != nil {
 		c.JSON(http.StatusBadRequest, model.DefaultResponse{
-			Message: err.Error(),
+			Message: ErrInvalidBody.Error(),
 		})
 		return
 	}

@@ -18,8 +18,8 @@ var (
 	// ErrUsernameExists is the error message when the username already exists.
 	ErrUsernameExists = errors.New("username already exists")
 
-	// ErrFailedSignUp is the error message when the sign up fails.
-	ErrFailedSignUp = errors.New("failed to sign up")
+	// ErrFailedRegister is the error message when the user register fails.
+	ErrFailedRegister = errors.New("failed to sign up")
 )
 
 func (ms MovieService) LoginUser(username, password string) error {
@@ -61,7 +61,7 @@ func (ms MovieService) RegisterUser(username, password string) error {
 
 	if err := row.Scan(&count); err != nil && err != sql.ErrNoRows {
 		utils.ErrorLogger.Println(err)
-		return ErrFailedSignUp
+		return ErrFailedRegister
 	}
 
 	if count > 0 {
@@ -72,7 +72,7 @@ func (ms MovieService) RegisterUser(username, password string) error {
 
 	if err != nil {
 		utils.ErrorLogger.Println(err)
-		return ErrFailedSignUp
+		return ErrFailedRegister
 	}
 
 	sqlStatement = `
@@ -82,7 +82,7 @@ func (ms MovieService) RegisterUser(username, password string) error {
 
 	if _, err := ms.db.Exec(sqlStatement, username, hashedPassword); err != nil {
 		utils.ErrorLogger.Println(err)
-		return ErrFailedSignUp
+		return ErrFailedRegister
 	}
 
 	return nil

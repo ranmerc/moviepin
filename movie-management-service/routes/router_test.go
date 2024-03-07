@@ -4,14 +4,17 @@ import (
 	"net/http"
 	"testing"
 
+	"movie-management-service/grpcclient"
 	"movie-management-service/handlers"
 	"movie-management-service/mock"
 )
 
 func TestNewRoutes(t *testing.T) {
 	mockService := &mock.ServiceMock{}
+	mockClient := mock.NewTokenClientMock(mock.OK)
+	tokenClient := grpcclient.NewTokenServiceClient(mockClient)
 
-	movieHandler := handlers.NewMovieHandler(mockService)
+	movieHandler := handlers.NewMovieHandler(mockService, tokenClient)
 	got := NewRoutes(movieHandler)
 
 	expectedRoutes := []struct {
@@ -27,6 +30,8 @@ func TestNewRoutes(t *testing.T) {
 		{"/movies/:movieID", http.MethodPut},
 		{"/movies", http.MethodPut},
 		{"/movies/:movieID/rating", http.MethodGet},
+		{"/login", http.MethodPost},
+		{"/register", http.MethodPost},
 	}
 
 	t.Run("all routes are present", func(t *testing.T) {

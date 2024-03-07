@@ -1,17 +1,12 @@
 package handlers
 
 import (
-	"errors"
+	"movie-management-service/domain"
 	"movie-management-service/model"
 	"movie-management-service/utils"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-)
-
-var (
-	// ErrInvalidCredentials is the error message when the credentials are invalid.
-	ErrInvalidCredentials = errors.New("invalid credentials")
 )
 
 // Handles user login.
@@ -22,18 +17,34 @@ func (mh MovieHandler) LoginHandler(c *gin.Context) {
 
 	if err := utils.Validate.Struct(req); err != nil {
 		c.JSON(http.StatusBadRequest, model.DefaultResponse{
-			Message: err.Error(),
+			Message: ErrInvalidBody.Error(),
 		})
 		return
 	}
 
 	if err := mh.domain.LoginUser(req.Username, req.Password); err != nil {
-		c.JSON(http.StatusUnauthorized, model.DefaultResponse{
-			Message: ErrInvalidCredentials.Error(),
+		if err == domain.ErrInvalidCredentials {
+			c.JSON(http.StatusUnauthorized, model.DefaultResponse{
+				Message: err.Error(),
+			})
+			return
+		}
+
+		c.JSON(http.StatusInternalServerError, model.DefaultResponse{
+			Message: err.Error(),
 		})
-	} else {
-		c.JSON(http.StatusOK, model.DefaultResponse{
-			Message: "login successful",
-		})
+		return
 	}
+
+	token, err := mh.tokenClient.GenerateToken(req.Username)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, model.DefaultResponse{
+			Message: err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"token": token,
+	})
 }
