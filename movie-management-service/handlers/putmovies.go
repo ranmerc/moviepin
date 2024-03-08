@@ -14,8 +14,8 @@ func (mh MovieHandler) PutMoviesHandler(c *gin.Context) {
 	var req model.MoviesRequestBody
 
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"message": apperror.CustomValidationError(err),
+		c.JSON(http.StatusBadRequest, model.ValidationErrorResponse{
+			Message: apperror.CustomValidationError(err),
 		})
 		return
 	}
@@ -23,8 +23,8 @@ func (mh MovieHandler) PutMoviesHandler(c *gin.Context) {
 	if err := utils.Validate.Struct(req); err != nil {
 		utils.ErrorLogger.Print(err)
 
-		c.JSON(http.StatusBadRequest, gin.H{
-			"message": apperror.CustomValidationError(err),
+		c.JSON(http.StatusBadRequest, model.ValidationErrorResponse{
+			Message: apperror.CustomValidationError(err),
 		})
 		return
 	}

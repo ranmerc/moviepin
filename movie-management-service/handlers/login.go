@@ -17,8 +17,8 @@ func (mh MovieHandler) LoginHandler(c *gin.Context) {
 	req.Password = c.PostForm("password")
 
 	if err := utils.Validate.Struct(req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"message": apperror.CustomValidationError(err),
+		c.JSON(http.StatusBadRequest, model.ValidationErrorResponse{
+			Message: apperror.CustomValidationError(err),
 		})
 		return
 	}
@@ -45,7 +45,7 @@ func (mh MovieHandler) LoginHandler(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"token": token,
+	c.JSON(http.StatusOK, model.LoginResponse{
+		Token: token,
 	})
 }
