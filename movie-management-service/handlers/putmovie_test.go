@@ -99,12 +99,18 @@ func TestPutMovieHandler(t *testing.T) {
 			err:    mock.OK,
 			status: http.StatusBadRequest,
 			body: gin.H{
-				"movie": gin.H{},
+				"movie": gin.H{
+					"title":       mock.Movie.Title,
+					"releaseDate": mock.Movie.ReleaseDate.Format(time.RFC3339),
+					"genre":       mock.Movie.Genre,
+					"director":    mock.Movie.Director,
+					"description": mock.Movie.Description,
+				},
 			},
 			resp: gin.H{
 				"message": []gin.H{
 					{
-						"movie": "is required",
+						"ID": "is required",
 					},
 				},
 			},
