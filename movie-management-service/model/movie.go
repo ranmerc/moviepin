@@ -24,9 +24,9 @@ type MovieRequestUri struct {
 }
 
 type MoviesRequestBody struct {
-	Movies []Movie `json:"movies" validate:"required,dive"`
+	Movies []Movie `json:"movies" validate:"required,gt=0,dive,required"`
 }
 
 type MovieRequestBody struct {
-	Movies Movie `json:"movie" validate:"required"`
+	Movie Movie `json:"movie" validate:"required"`
 }

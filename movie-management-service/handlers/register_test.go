@@ -64,7 +64,11 @@ func TestRegisterHandler(t *testing.T) {
 			status: http.StatusBadRequest,
 			req:    "username=user&password=password",
 			resp: gin.H{
-				"message": "invalid request body",
+				"message": []gin.H{
+					{
+						"username": "should be minimum 6 characters",
+					},
+				},
 			},
 		},
 		"singup request failed when password is too short": {
@@ -72,7 +76,11 @@ func TestRegisterHandler(t *testing.T) {
 			status: http.StatusBadRequest,
 			req:    "username=username&password=pass",
 			resp: gin.H{
-				"message": "invalid request body",
+				"message": []gin.H{
+					{
+						"password": "should be minimum 8 characters",
+					},
+				},
 			},
 		},
 	}

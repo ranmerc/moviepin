@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"errors"
+	"movie-management-service/apperror"
 	"movie-management-service/model"
 	"movie-management-service/utils"
 	"net/http"
@@ -19,8 +20,8 @@ func (mh MovieHandler) PostMoviesHandler(c *gin.Context) {
 	var req model.MoviesRequestBody
 
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, model.DefaultResponse{
-			Message: ErrInvalidBody.Error(),
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": apperror.CustomValidationError(err),
 		})
 		return
 	}
@@ -28,16 +29,8 @@ func (mh MovieHandler) PostMoviesHandler(c *gin.Context) {
 	if err := utils.Validate.Struct(req); err != nil {
 		utils.ErrorLogger.Print(err)
 
-		c.JSON(http.StatusBadRequest, model.DefaultResponse{
-			Message: ErrInvalidBody.Error(),
-		})
-		return
-	}
-
-	// If no movies are sent in request.
-	if len(req.Movies) == 0 {
-		c.JSON(http.StatusBadRequest, model.DefaultResponse{
-			Message: ErrEmptyBody.Error(),
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": apperror.CustomValidationError(err),
 		})
 		return
 	}

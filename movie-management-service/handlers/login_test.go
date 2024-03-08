@@ -68,7 +68,11 @@ func TestLoginHandler(t *testing.T) {
 			status:  http.StatusBadRequest,
 			req:     "username=user&password=password",
 			resp: gin.H{
-				"message": "invalid request body",
+				"message": []gin.H{
+					{
+						"username": "should be minimum 6 characters",
+					},
+				},
 			},
 		},
 		"login request failed when password is too short": {
@@ -77,7 +81,11 @@ func TestLoginHandler(t *testing.T) {
 			status:  http.StatusBadRequest,
 			req:     "username=username&password=pass",
 			resp: gin.H{
-				"message": "invalid request body",
+				"message": []gin.H{
+					{
+						"password": "should be minimum 8 characters",
+					},
+				},
 			},
 		},
 		"login request failed when unable to generate token": {

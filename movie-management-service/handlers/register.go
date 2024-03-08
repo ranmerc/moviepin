@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"movie-management-service/apperror"
 	"movie-management-service/domain"
 	"movie-management-service/model"
 	"movie-management-service/utils"
@@ -16,8 +17,8 @@ func (mh MovieHandler) RegisterHandler(c *gin.Context) {
 	req.Password = c.PostForm("password")
 
 	if err := utils.Validate.Struct(req); err != nil {
-		c.JSON(http.StatusBadRequest, model.DefaultResponse{
-			Message: ErrInvalidBody.Error(),
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": apperror.CustomValidationError(err),
 		})
 		return
 	}

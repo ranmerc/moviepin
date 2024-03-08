@@ -102,7 +102,11 @@ func TestPatchMovieHandler(t *testing.T) {
 			status: http.StatusBadRequest,
 			body:   body,
 			resp: gin.H{
-				"message": "invalid id",
+				"message": []gin.H{
+					{
+						"movieID": "should be an UUID",
+					},
+				},
 			},
 		},
 		"movie patch request when title in body is invalid": {

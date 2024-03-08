@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"movie-management-service/apperror"
 	"movie-management-service/domain"
 	"movie-management-service/model"
 	"movie-management-service/utils"
@@ -14,8 +15,8 @@ func (mh MovieHandler) GetMovieRatingHandler(c *gin.Context) {
 	var req model.MovieRequestUri
 
 	if err := c.ShouldBindUri(&req); err != nil {
-		c.JSON(http.StatusBadRequest, model.DefaultResponse{
-			Message: ErrIDRequired.Error(),
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": apperror.CustomValidationError(err),
 		})
 		return
 	}
@@ -23,8 +24,8 @@ func (mh MovieHandler) GetMovieRatingHandler(c *gin.Context) {
 	if err := utils.Validate.Struct(req); err != nil {
 		utils.ErrorLogger.Print(err)
 
-		c.JSON(http.StatusBadRequest, model.DefaultResponse{
-			Message: ErrInvalidID.Error(),
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": apperror.CustomValidationError(err),
 		})
 		return
 	}

@@ -30,12 +30,14 @@ func TestPutMovieHandler(t *testing.T) {
 	httpServer := httptest.NewServer(server)
 
 	body := gin.H{
-		"ID":          mock.Movie.ID,
-		"title":       mock.Movie.Title,
-		"releaseDate": mock.Movie.ReleaseDate.Format(time.RFC3339),
-		"genre":       mock.Movie.Genre,
-		"director":    mock.Movie.Director,
-		"description": mock.Movie.Description,
+		"movie": gin.H{
+			"ID":          mock.Movie.ID,
+			"title":       mock.Movie.Title,
+			"releaseDate": mock.Movie.ReleaseDate.Format(time.RFC3339),
+			"genre":       mock.Movie.Genre,
+			"director":    mock.Movie.Director,
+			"description": mock.Movie.Description,
+		},
 	}
 
 	cases := map[string]struct {
@@ -85,16 +87,26 @@ func TestPutMovieHandler(t *testing.T) {
 			status: http.StatusBadRequest,
 			body:   body,
 			resp: gin.H{
-				"message": "invalid id",
+				"message": []gin.H{
+					{
+						"movieID": "should be an UUID",
+					},
+				},
 			},
 		},
-		"movie put request when date in body is empty": {
+		"movie put request when body is invalid": {
 			id:     mock.Movie.ID,
 			err:    mock.OK,
 			status: http.StatusBadRequest,
-			body:   gin.H{},
+			body: gin.H{
+				"movie": gin.H{},
+			},
 			resp: gin.H{
-				"message": "invalid request body",
+				"message": []gin.H{
+					{
+						"movie": "is required",
+					},
+				},
 			},
 		},
 	}
