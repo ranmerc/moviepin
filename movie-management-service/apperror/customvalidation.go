@@ -9,25 +9,34 @@ import (
 )
 
 var (
+	// errIsRequired is a custom error message for required fields.
+	errIsRequired = errors.New("is required")
+
+	// errIsUUID is a custom error message for UUID fields.
+	errIsUUID = errors.New("should be an UUID")
+)
+
+var (
+	// customErrors is a map of custom error messages for validation errors.
 	customErrors = map[string]error{
-		"movieID.required":     errors.New("is required"),
-		"movieID.uuid":         errors.New("should be an UUID"),
-		"username.required":    errors.New("is required"),
+		"movieID.required":     errIsRequired,
+		"movieID.uuid":         errIsUUID,
+		"username.required":    errIsRequired,
 		"username.min":         errors.New("should be minimum 6 characters"),
-		"password.required":    errors.New("is required"),
+		"password.required":    errIsRequired,
 		"password.min":         errors.New("should be minimum 8 characters"),
-		"ID.required":          errors.New("is required"),
-		"ID.uuid":              errors.New("should be an UUID"),
-		"title.required":       errors.New("is required"),
-		"releaseDate.required": errors.New("is required"),
-		"genre.required":       errors.New("is required"),
+		"ID.required":          errIsRequired,
+		"ID.uuid":              errIsUUID,
+		"title.required":       errIsRequired,
+		"releaseDate.required": errIsRequired,
+		"genre.required":       errIsRequired,
 		"genre.oneof":          errors.New("should be one of ACTION, COMEDY, DRAMA, FANTASY, HORROR, SCI-FI, THRILLER"),
-		"director.required":    errors.New("is required"),
-		"description.required": errors.New("is required"),
+		"director.required":    errIsRequired,
+		"description.required": errIsRequired,
 		"description.max":      errors.New("should be maximum 500 characters"),
-		"movies.required":      errors.New("is required"),
+		"movies.required":      errIsRequired,
 		"movies.gt":            errors.New("should have at least one movie"),
-		"movie.required":       errors.New("is required"),
+		"movie.required":       errIsRequired,
 	}
 )
 
