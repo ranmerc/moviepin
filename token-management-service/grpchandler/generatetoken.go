@@ -13,7 +13,7 @@ import (
 func (h Handler) GenerateToken(_ context.Context, req *tokenpb.GenerateTokenRequest) (*tokenpb.GenerateTokenResponse, error) {
 	username := req.GetUsername()
 
-	if username == "" {
+	if len(username) == 0 {
 		return nil, ErrEmptyUsername
 	}
 

@@ -85,7 +85,7 @@ func TestAuth_Middleware(t *testing.T) {
 
 		request, _ := http.NewRequest(routeHttpMethod, server.URL+route, nil)
 
-		if v.header != "" {
+		if len(v.header) != 0 {
 			request.Header.Set("Authorization", v.header)
 		}
 

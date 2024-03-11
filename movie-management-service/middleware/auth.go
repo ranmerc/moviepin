@@ -39,7 +39,7 @@ func (am *AuthMiddleware) Middleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		authHeader := c.GetHeader("Authorization")
 
-		if authHeader == "" {
+		if len(authHeader) == 0 {
 			c.JSON(http.StatusUnauthorized, model.DefaultResponse{
 				Message: ErrMissingAuthHeader.Error(),
 			})

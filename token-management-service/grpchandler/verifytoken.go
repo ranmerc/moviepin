@@ -12,7 +12,7 @@ import (
 func (h Handler) VerifyToken(_ context.Context, req *tokenpb.VerifyTokenRequest) (*tokenpb.VerifyTokenResponse, error) {
 	token := req.GetToken()
 
-	if token == "" {
+	if len(token) == 0 {
 		return nil, ErrEmptyToken
 	}
 
