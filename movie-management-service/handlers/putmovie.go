@@ -11,7 +11,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// Updates a particular movie.
+// Replace a particular movie.
 func (mh MovieHandler) PutMovieHandler(c *gin.Context) {
 	var req model.MovieRequestUri
 

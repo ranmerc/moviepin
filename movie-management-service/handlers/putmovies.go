@@ -9,7 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// Updates whole collection of movies.
+// Replaces whole collection of movies.
 func (mh MovieHandler) PutMoviesHandler(c *gin.Context) {
 	var req model.MoviesRequestBody
 
