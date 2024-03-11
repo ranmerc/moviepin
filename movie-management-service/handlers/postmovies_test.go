@@ -124,10 +124,8 @@ func TestPostMoviesHandler(t *testing.T) {
 			status: http.StatusBadRequest,
 			body:   gin.H{},
 			resp: gin.H{
-				"message": []gin.H{
-					{
-						"movies": "is required",
-					},
+				"message": gin.H{
+					"movies": "is required",
 				},
 			},
 		},
@@ -136,10 +134,8 @@ func TestPostMoviesHandler(t *testing.T) {
 			status: http.StatusBadRequest,
 			body:   gin.H{"movies": []gin.H{}},
 			resp: gin.H{
-				"message": []gin.H{
-					{
-						"movies": "should have at least one movie",
-					},
+				"message": gin.H{
+					"movies": "should have at least one movie",
 				},
 			},
 		},

@@ -5,5 +5,5 @@ type DefaultResponse struct {
 }
 
 type ValidationErrorResponse struct {
-	Message []map[string]string `json:"message"`
+	Message map[string]string `json:"message"`
 }

@@ -102,10 +102,8 @@ func TestPatchMovieHandler(t *testing.T) {
 			status: http.StatusBadRequest,
 			body:   body,
 			resp: gin.H{
-				"message": []gin.H{
-					{
-						"movieID": "should be an UUID",
-					},
+				"message": gin.H{
+					"movieID": "should be an UUID",
 				},
 			},
 		},

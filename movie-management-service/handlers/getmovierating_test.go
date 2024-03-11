@@ -69,10 +69,8 @@ func TestGetMovieRatingHandler(t *testing.T) {
 			err:    mock.OK,
 			status: http.StatusBadRequest,
 			resp: gin.H{
-				"message": []gin.H{
-					{
-						"movieID": "should be an UUID",
-					},
+				"message": gin.H{
+					"movieID": "should be an UUID",
 				},
 			},
 		},

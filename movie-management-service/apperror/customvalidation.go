@@ -32,27 +32,24 @@ var (
 )
 
 // CustomValidationError converts validation and json marshal error into custom error type.
-func CustomValidationError(err error) []map[string]string {
-	errs := make([]map[string]string, 0)
+func CustomValidationError(err error) map[string]string {
+	errs := make(map[string]string, 0)
 	switch errTypes := err.(type) {
 	case validator.ValidationErrors:
 		for _, e := range errTypes {
-			errorMap := make(map[string]string)
-
 			key := e.Field() + "." + e.Tag()
 
 			if v, ok := customErrors[key]; ok {
-				errorMap[e.Field()] = v.Error()
+				errs[e.Field()] = v.Error()
 			} else {
-				errorMap[e.Field()] = fmt.Sprintf("custom message is not available: %v", err)
+				errs[e.Field()] = fmt.Sprintf("custom message is not available: %v", err)
 			}
-			errs = append(errs, errorMap)
 		}
 		return errs
 	case *json.UnmarshalTypeError:
-		errs = append(errs, map[string]string{errTypes.Field: fmt.Sprintf("%v cannot be a %v", errTypes.Field, errTypes.Value)})
+		errs[errTypes.Field] = fmt.Sprintf("%v cannot be a %v", errTypes.Field, errTypes.Value)
 		return errs
 	}
-	errs = append(errs, map[string]string{"unknown": fmt.Sprintf("unsupported custom error for: %v", err)})
+	errs["unknown"] = fmt.Sprintf("unsupported custom error for: %v", err)
 	return errs
 }

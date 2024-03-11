@@ -87,10 +87,8 @@ func TestPutMovieHandler(t *testing.T) {
 			status: http.StatusBadRequest,
 			body:   body,
 			resp: gin.H{
-				"message": []gin.H{
-					{
-						"movieID": "should be an UUID",
-					},
+				"message": gin.H{
+					"movieID": "should be an UUID",
 				},
 			},
 		},
@@ -108,10 +106,8 @@ func TestPutMovieHandler(t *testing.T) {
 				},
 			},
 			resp: gin.H{
-				"message": []gin.H{
-					{
-						"ID": "is required",
-					},
+				"message": gin.H{
+					"ID": "is required",
 				},
 			},
 		},
