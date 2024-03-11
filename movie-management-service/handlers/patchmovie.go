@@ -62,7 +62,7 @@ func (mh MovieHandler) PatchMovieHandler(c *gin.Context) {
 	existingMovie, err := mh.domain.GetMovie(req.ID)
 
 	if err != nil {
-		if err == domain.ErrNotExists {
+		if errors.Is(err, domain.ErrNotExists) {
 			c.JSON(http.StatusNotFound, model.DefaultResponse{
 				Message: "movie not found",
 			})
@@ -141,10 +141,8 @@ func (mh MovieHandler) PatchMovieHandler(c *gin.Context) {
 		return
 	}
 
-	err = mh.domain.UpdateMovie(req.ID, *existingMovie)
-
-	if err != nil {
-		if err == domain.ErrNotExists {
+	if err := mh.domain.UpdateMovie(req.ID, *existingMovie); err != nil {
+		if errors.Is(err, domain.ErrNotExists) {
 			c.JSON(http.StatusNotFound, model.DefaultResponse{
 				Message: "movie not found",
 			})

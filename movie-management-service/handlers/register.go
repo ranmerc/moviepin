@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"errors"
 	"movie-management-service/apperror"
 	"movie-management-service/domain"
 	"movie-management-service/model"
@@ -24,7 +25,7 @@ func (mh MovieHandler) RegisterHandler(c *gin.Context) {
 	}
 
 	if err := mh.domain.RegisterUser(req.Username, req.Password); err != nil {
-		if err == domain.ErrUsernameExists {
+		if errors.Is(err, domain.ErrUsernameExists) {
 			c.JSON(http.StatusConflict, model.DefaultResponse{
 				Message: err.Error(),
 			})

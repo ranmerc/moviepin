@@ -63,7 +63,7 @@ func (ms MovieService) GetMovies() ([]*model.Movie, error) {
 		movies = append(movies, movie)
 	}
 
-	if err = rows.Err(); err != nil {
+	if err := rows.Err(); err != nil {
 		return nil, ErrFailedGetMovies
 	}
 
@@ -83,22 +83,20 @@ func (ms MovieService) ReplaceMovies(movies []model.Movie) error {
 	// Reviews are deleted first because of foreign key constraint.
 	sqlStatement := `DELETE FROM "reviews";`
 
-	_, err = tx.Exec(sqlStatement)
-
-	if err != nil {
+	if _, err := tx.Exec(sqlStatement); err != nil {
 		return ErrFailedReplace
 	}
 
 	sqlStatement = `DELETE FROM "movies";`
 
-	_, err = tx.Exec(sqlStatement)
-
-	if err != nil {
+	if _, err := tx.Exec(sqlStatement); err != nil {
 		return ErrFailedReplace
 	}
 
-	var wg sync.WaitGroup
-	var mu sync.Mutex
+	var (
+		wg sync.WaitGroup
+		mu sync.Mutex
+	)
 
 	for _, movie := range movies {
 		wg.Add(1)
@@ -111,9 +109,7 @@ func (ms MovieService) ReplaceMovies(movies []model.Movie) error {
 				VALUES ($1, $2, $3, $4, $5, $6);
 			`
 
-			_, err := tx.Exec(sqlStatement, movie.ID, movie.Title, movie.ReleaseDate, movie.Genre, movie.Director, movie.Description)
-
-			if err != nil {
+			if _, err := tx.Exec(sqlStatement, movie.ID, movie.Title, movie.ReleaseDate, movie.Genre, movie.Director, movie.Description); err != nil {
 				mu.Lock()
 				tx.Rollback()
 				mu.Unlock()
@@ -125,7 +121,7 @@ func (ms MovieService) ReplaceMovies(movies []model.Movie) error {
 
 	wg.Wait()
 
-	if err = tx.Commit(); err != nil {
+	if err := tx.Commit(); err != nil {
 		return ErrFailedReplace
 	}
 
@@ -140,12 +136,10 @@ func (ms MovieService) GetMovie(id string) (*model.Movie, error) {
 		WHERE "movieID" = $1;
 	`
 
-	row := ms.db.QueryRow(sqlStatement, id)
-
 	movie := &model.Movie{}
 
-	if err := row.Scan(&movie.ID, &movie.Title, &movie.ReleaseDate, &movie.Genre, &movie.Director, &movie.Description); err != nil {
-		if err == sql.ErrNoRows {
+	if err := ms.db.QueryRow(sqlStatement, id).Scan(&movie.ID, &movie.Title, &movie.ReleaseDate, &movie.Genre, &movie.Director, &movie.Description); err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
 			return nil, ErrNotExists
 		}
 
@@ -237,12 +231,10 @@ func (ms MovieService) GetMovieRating(id string) (*model.MovieReview, error) {
 		GROUP BY m."movieID";
 	`
 
-	row := ms.db.QueryRow(sqlStatement, id)
-
 	mr := &model.MovieReview{}
 
-	if err := row.Scan(&mr.ID, &mr.Title, &mr.ReleaseDate, &mr.Genre, &mr.Director, &mr.Description, &mr.Rating); err != nil {
-		if err == sql.ErrNoRows {
+	if err := ms.db.QueryRow(sqlStatement, id).Scan(&mr.ID, &mr.Title, &mr.ReleaseDate, &mr.Genre, &mr.Director, &mr.Description, &mr.Rating); err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
 			return nil, ErrNotExists
 		}
 

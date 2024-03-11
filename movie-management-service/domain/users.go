@@ -29,11 +29,9 @@ func (ms MovieService) LoginUser(username, password string) error {
 		WHERE "username" = $1;
 	`
 
-	row := ms.db.QueryRow(sqlStatement, username)
-
 	var hashedPassword string
-	if err := row.Scan(&hashedPassword); err != nil {
-		if err == sql.ErrNoRows {
+	if err := ms.db.QueryRow(sqlStatement, username).Scan(&hashedPassword); err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
 			return ErrInvalidCredentials
 		}
 
@@ -55,11 +53,9 @@ func (ms MovieService) RegisterUser(username, password string) error {
 		WHERE "username" = $1;
 	`
 
-	row := ms.db.QueryRow(sqlStatement, username)
-
 	var count int
 
-	if err := row.Scan(&count); err != nil && err != sql.ErrNoRows {
+	if err := ms.db.QueryRow(sqlStatement, username).Scan(&count); err != nil && err != sql.ErrNoRows {
 		utils.ErrorLogger.Println(err)
 		return ErrFailedRegister
 	}

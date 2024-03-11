@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"errors"
 	"movie-management-service/apperror"
 	"movie-management-service/domain"
 	"movie-management-service/model"
@@ -48,10 +49,8 @@ func (mh MovieHandler) PutMovieHandler(c *gin.Context) {
 		return
 	}
 
-	err := mh.domain.UpdateMovie(req.ID, body.Movie)
-
-	if err != nil {
-		if err == domain.ErrNotExists {
+	if err := mh.domain.UpdateMovie(req.ID, body.Movie); err != nil {
+		if errors.Is(err, domain.ErrNotExists) {
 			c.JSON(http.StatusNotFound, model.DefaultResponse{
 				Message: err.Error(),
 			})

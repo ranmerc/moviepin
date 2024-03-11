@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"errors"
 	"movie-management-service/apperror"
 	"movie-management-service/domain"
 	"movie-management-service/model"
@@ -24,7 +25,7 @@ func (mh MovieHandler) LoginHandler(c *gin.Context) {
 	}
 
 	if err := mh.domain.LoginUser(req.Username, req.Password); err != nil {
-		if err == domain.ErrInvalidCredentials {
+		if errors.Is(err, domain.ErrInvalidCredentials) {
 			c.JSON(http.StatusUnauthorized, model.DefaultResponse{
 				Message: err.Error(),
 			})

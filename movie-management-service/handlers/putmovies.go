@@ -29,9 +29,7 @@ func (mh MovieHandler) PutMoviesHandler(c *gin.Context) {
 		return
 	}
 
-	err := mh.domain.ReplaceMovies(req.Movies)
-
-	if err != nil {
+	if err := mh.domain.ReplaceMovies(req.Movies); err != nil {
 		c.JSON(http.StatusInternalServerError, model.DefaultResponse{
 			Message: err.Error(),
 		})

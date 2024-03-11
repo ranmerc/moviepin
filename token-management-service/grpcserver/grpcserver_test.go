@@ -39,10 +39,9 @@ func TestServer_ListenAndServe(t *testing.T) {
 		t.Errorf("failed to call GenerateToken: %v", err)
 	}
 
-	_, err = service.VerifyToken(context.Background(), &tokenpb.VerifyTokenRequest{
+	if _, err := service.VerifyToken(context.Background(), &tokenpb.VerifyTokenRequest{
 		Token: res.Token,
-	})
-	if err != nil {
+	}); err != nil {
 		t.Errorf("failed to call VerifyToken: %v", err)
 	}
 }

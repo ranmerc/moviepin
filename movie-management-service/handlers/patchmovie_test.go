@@ -211,8 +211,7 @@ func TestPatchMovieHandler(t *testing.T) {
 			}
 
 			var got gin.H
-			err = json.Unmarshal(body, &got)
-			if err != nil {
+			if err := json.Unmarshal(body, &got); err != nil {
 				t.Fatal(err)
 			}
 

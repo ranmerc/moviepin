@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"errors"
 	"movie-management-service/apperror"
 	"movie-management-service/domain"
 	"movie-management-service/model"
@@ -30,10 +31,8 @@ func (mh MovieHandler) DeleteMovieHandler(c *gin.Context) {
 		return
 	}
 
-	err := mh.domain.DeleteMovie(req.ID)
-
-	if err != nil {
-		if err == domain.ErrNotExists {
+	if err := mh.domain.DeleteMovie(req.ID); err != nil {
+		if errors.Is(err, domain.ErrNotExists) {
 			c.JSON(http.StatusNoContent, nil)
 			return
 		}

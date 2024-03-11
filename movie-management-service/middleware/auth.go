@@ -59,8 +59,7 @@ func (am *AuthMiddleware) Middleware() gin.HandlerFunc {
 
 		token := authHeaderParts[1]
 
-		valid, err := am.tokenClient.VerifyToken(token)
-		if err != nil || !valid {
+		if valid, err := am.tokenClient.VerifyToken(token); err != nil || !valid {
 			c.JSON(http.StatusUnauthorized, model.DefaultResponse{
 				Message: ErrInvalidToken.Error(),
 			})
