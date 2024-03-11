@@ -38,7 +38,7 @@ var (
 // Returns slice of all movies present.
 func (ms MovieService) GetMovies() ([]*model.Movie, error) {
 	sqlStatement := `
-		SELECT "movieID", "title", "releaseDate", "genre", "director", "description" 
+		SELECT "ID", "title", "releaseDate", "genre", "director", "description" 
 		FROM "movies";
 	`
 
@@ -105,7 +105,7 @@ func (ms MovieService) ReplaceMovies(movies []model.Movie) error {
 			defer wg.Done()
 
 			sqlStatement = `
-				INSERT INTO "movies" ("movieID", "title", "releaseDate", "genre", "director", "description") 
+				INSERT INTO "movies" ("ID", "title", "releaseDate", "genre", "director", "description") 
 				VALUES ($1, $2, $3, $4, $5, $6);
 			`
 
@@ -131,9 +131,9 @@ func (ms MovieService) ReplaceMovies(movies []model.Movie) error {
 // Returns particular movie.
 func (ms MovieService) GetMovie(id string) (*model.Movie, error) {
 	sqlStatement := `
-		SELECT "movieID", "title", "releaseDate", "genre", "director", "description" 
+		SELECT "ID", "title", "releaseDate", "genre", "director", "description" 
 		FROM "movies" 
-		WHERE "movieID" = $1;
+		WHERE "ID" = $1;
 	`
 
 	movie := &model.Movie{}
@@ -153,7 +153,7 @@ func (ms MovieService) GetMovie(id string) (*model.Movie, error) {
 // Adds movie to the database.
 func (ms MovieService) AddMovie(newMovie model.Movie) error {
 	sqlStatement := `
-		INSERT INTO "movies" ("movieID", "title", "releaseDate", "genre", "director", "description") 
+		INSERT INTO "movies" ("ID", "title", "releaseDate", "genre", "director", "description") 
 		VALUES ($1, $2, $3, $4, $5, $6);`
 
 	if _, err := ms.db.Exec(sqlStatement, newMovie.ID, newMovie.Title, newMovie.ReleaseDate, newMovie.Genre, newMovie.Director, newMovie.Description); err != nil {
@@ -168,7 +168,7 @@ func (ms MovieService) AddMovie(newMovie model.Movie) error {
 func (ms MovieService) DeleteMovie(id string) error {
 	sqlStatement := `
 		DELETE FROM "movies" 
-		WHERE "movieID" = $1;
+		WHERE "ID" = $1;
 	`
 
 	result, err := ms.db.Exec(sqlStatement, id)
@@ -196,8 +196,8 @@ func (ms MovieService) DeleteMovie(id string) error {
 func (ms MovieService) UpdateMovie(id string, movie model.Movie) error {
 	sqlStatement := `
 		UPDATE "movies" 
-		SET "movieID" = $1, "title" = $2, "releaseDate" = $3, "genre" = $4, "director" = $5, "description" = $6 
-		WHERE "movieID" = $7;
+		SET "ID" = $1, "title" = $2, "releaseDate" = $3, "genre" = $4, "director" = $5, "description" = $6 
+		WHERE "ID" = $7;
 	`
 
 	result, err := ms.db.Exec(sqlStatement, movie.ID, movie.Title, movie.ReleaseDate, movie.Genre, movie.Director, movie.Description, id)
@@ -224,11 +224,11 @@ func (ms MovieService) UpdateMovie(id string, movie model.Movie) error {
 // Returns movie details along with its rating.
 func (ms MovieService) GetMovieRating(id string) (*model.MovieReview, error) {
 	sqlStatement := `
-		SELECT m."movieID", m."title", m."releaseDate", m."genre", m."director", m."description", COALESCE(TRUNC(ROUND(AVG(r.rating)), 1), 0) AS "rating"
+		SELECT m."ID", m."title", m."releaseDate", m."genre", m."director", m."description", COALESCE(TRUNC(ROUND(AVG(r.rating)), 1), 0) AS "rating" 
 		FROM "movies" m 
-		LEFT JOIN "reviews" r ON m."movieID" = r."movieID" 
-		WHERE m."movieID" = $1 
-		GROUP BY m."movieID";
+		LEFT JOIN "reviews" r ON m."ID" = r."movieID" 
+		WHERE m."ID" = $1 
+		GROUP BY m."ID";
 	`
 
 	mr := &model.MovieReview{}
