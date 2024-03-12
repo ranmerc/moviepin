@@ -34,13 +34,6 @@ func (mh MovieHandler) PatchMovieHandler(c *gin.Context) {
 	var req model.MovieRequestUri
 
 	if err := c.ShouldBindUri(&req); err != nil {
-		c.JSON(http.StatusBadRequest, model.ValidationErrorResponse{
-			Message: apperror.CustomValidationError(err),
-		})
-		return
-	}
-
-	if err := utils.Validate.Struct(req); err != nil {
 		utils.ErrorLogger.Print(err)
 
 		c.JSON(http.StatusBadRequest, model.ValidationErrorResponse{
@@ -134,7 +127,9 @@ func (mh MovieHandler) PatchMovieHandler(c *gin.Context) {
 	}
 
 	// Validate updated movie.
-	if err := utils.Validate.Struct(existingMovie); err != nil {
+	if err := validate.Struct(existingMovie); err != nil {
+		utils.ErrorLogger.Print(err)
+
 		c.JSON(http.StatusBadRequest, model.DefaultResponse{
 			Message: err.Error(),
 		})

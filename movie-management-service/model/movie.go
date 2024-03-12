@@ -3,12 +3,12 @@ package model
 import "time"
 
 type Movie struct {
-	ID          string    `json:"ID" validate:"required,uuid"`
-	Title       string    `json:"title" validate:"required"`
-	ReleaseDate time.Time `json:"releaseDate" validate:"required"`
-	Genre       string    `json:"genre" validate:"required,oneof=ACTION COMEDY DRAMA FANTASY HORROR SCI-FI THRILLER"`
-	Director    string    `json:"director" validate:"required"`
-	Description string    `json:"description" validate:"required,max=500"`
+	ID          string    `json:"ID" binding:"required,uuid"`
+	Title       string    `json:"title" binding:"required"`
+	ReleaseDate time.Time `json:"releaseDate" binding:"required"`
+	Genre       string    `json:"genre" binding:"required,oneof=ACTION COMEDY DRAMA FANTASY HORROR SCI-FI THRILLER"`
+	Director    string    `json:"director" binding:"required"`
+	Description string    `json:"description" binding:"required,max=500"`
 }
 
 type MoviesResponse struct {
@@ -20,13 +20,13 @@ type MovieResponse struct {
 }
 
 type MovieRequestUri struct {
-	ID string `uri:"movieID" validate:"required,uuid"`
+	ID string `uri:"movieID" binding:"required,uuid"`
 }
 
 type MoviesRequestBody struct {
-	Movies []Movie `json:"movies" validate:"required,gt=0,dive,required"`
+	Movies []Movie `json:"movies" binding:"required,gt=0,dive,required"`
 }
 
 type MovieRequestBody struct {
-	Movie Movie `json:"movie" validate:"required"`
+	Movie Movie `json:"movie" binding:"required"`
 }

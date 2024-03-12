@@ -14,10 +14,10 @@ import (
 // Handles user login.
 func (mh MovieHandler) LoginHandler(c *gin.Context) {
 	var req model.AuthRequest
-	req.Username = c.PostForm("username")
-	req.Password = c.PostForm("password")
 
-	if err := utils.Validate.Struct(req); err != nil {
+	if err := c.ShouldBind(&req); err != nil {
+		utils.ErrorLogger.Print(err)
+
 		c.JSON(http.StatusBadRequest, model.ValidationErrorResponse{
 			Message: apperror.CustomValidationError(err),
 		})

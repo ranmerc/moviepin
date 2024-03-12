@@ -3,9 +3,33 @@ package handlers
 import (
 	"movie-management-service/domain"
 	"movie-management-service/grpcclient"
+	"reflect"
+	"strings"
 
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 )
+
+var (
+	validate = validator.New()
+)
+
+func init() {
+	// Registers a tag name function to enable use of tag name as field name in custom validation error message.
+	validate.RegisterTagNameFunc(func(fld reflect.StructField) string {
+		tags := []string{"json", "uri", "form"}
+		for _, key := range tags {
+			tag := fld.Tag.Get(key)
+			name := strings.SplitN(tag, ",", 2)[0]
+			if name == "-" {
+				return ""
+			} else if len(name) != 0 {
+				return name
+			}
+		}
+		return ""
+	})
+}
 
 // Handler is the interface that defines the movie handler methods.
 type Handler interface {
