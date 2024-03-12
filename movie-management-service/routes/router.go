@@ -96,7 +96,7 @@ func NewRoutes(mh *handlers.MovieHandler) Routes {
 		Route{
 			Name:        "Register User",
 			Method:      http.MethodPost,
-			Pattern:     "/register",
+			Pattern:     "/users",
 			Protected:   false,
 			HandlerFunc: mh.RegisterHandler,
 		},

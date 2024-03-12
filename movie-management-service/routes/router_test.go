@@ -31,7 +31,7 @@ func TestNewRoutes(t *testing.T) {
 		{"/movies", http.MethodPut},
 		{"/movies/:movieID/rating", http.MethodGet},
 		{"/login", http.MethodPost},
-		{"/register", http.MethodPost},
+		{"/users", http.MethodPost},
 	}
 
 	t.Run("all routes are present", func(t *testing.T) {

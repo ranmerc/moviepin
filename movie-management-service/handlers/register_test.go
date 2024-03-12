@@ -23,7 +23,7 @@ func TestRegisterHandler(t *testing.T) {
 	mockService := mock.NewServiceMock()
 	handler := NewMovieHandler(&mockService, tokenClient)
 
-	route := "/register"
+	route := "/users"
 	routeHttpMethod := http.MethodPost
 
 	server.Handle(routeHttpMethod, route, handler.RegisterHandler)
