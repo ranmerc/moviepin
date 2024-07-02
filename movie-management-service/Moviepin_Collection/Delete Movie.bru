@@ -1,0 +1,15 @@
+meta {
+  name: Delete Movie
+  type: http
+  seq: 5
+}
+
+delete {
+  url: http://localhost:4545/movies/650e8400-e29b-41d4-a716-446655440003
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjb29sdXNlciIsImV4cCI6MTcxMDE1NDU3N30.ELOJzrbsWAQjz5P6JoBl8oetrZtzgW-R5E7uuyCOzUk
+}

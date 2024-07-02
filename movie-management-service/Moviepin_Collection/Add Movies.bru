@@ -1,0 +1,46 @@
+meta {
+  name: Add Movies
+  type: http
+  seq: 9
+}
+
+post {
+  url: http://localhost:4545/movies
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjb29sdXNlciIsImV4cCI6MTcxMDE1NDU3N30.ELOJzrbsWAQjz5P6JoBl8oetrZtzgW-R5E7uuyCOzUk
+}
+
+body:json {
+  {
+    "movies": [
+      {
+        "ID": "650e8400-e29b-41d4-a716-446655440002",
+        "title": "Dummy Movie 2",
+        "releaseDate": "2022-01-01T00:00:00Z",
+        "genre": "ACTION",
+        "director": "Dummy Director 1",
+        "description": "A dummy movie description 1."
+      },
+      {
+        "ID": "650e8400-e29b-41d4-a716-446655440003",
+        "title": "Dummy Movie 2",
+        "releaseDate": "2022-01-01T00:00:00Z",
+        "genre": "COMEDY",
+        "director": "Dummy Director 1",
+        "description": "A dummy movie description 1."
+      },
+      {
+        "ID": "650e8400-e29b-41d4-a716-446655440001",
+        "title": "Dummy Movie 3",
+        "releaseDate": "2022-01-01T00:00:00Z",
+        "genre": "SCI-FI",
+        "director": "Dummy Director 1",
+        "description": "A dummy movie description 1."
+      }
+    ]
+  }
+}

@@ -1,0 +1,40 @@
+meta {
+  name: Replace Movies
+  type: http
+  seq: 7
+}
+
+put {
+  url: http://localhost:4545/movies/
+  body: json
+  auth: none
+}
+
+body:json {
+  [
+    {
+      "id": "650e8400-e29b-41d4-a716-446655440002",
+      "title": "Dummy Movie 2",
+      "release_date": "2022-01-01T00:00:00Z",
+      "genre": "Action",
+      "director": "Dummy Director 1",
+      "description": "A dummy movie description 1."
+    },
+    {
+      "id": "650e8400-e29b-41d4-a716-446655440003",
+      "title": "Dummy Movie 2",
+      "release_date": "2022-01-01T00:00:00Z",
+      "genre": "Action",
+      "director": "Dummy Director 1",
+      "description": "A dummy movie description 1."
+    },
+    {
+      "id": "650e8400-e29b-41d4-a716-446655440001",
+      "title": "Dummy Movie 3",
+      "release_date": "2022-01-01T00:00:00Z",
+      "genre": "Action",
+      "director": "Dummy Director 1",
+      "description": "A dummy movie description 1."
+    }
+  ]
+}
