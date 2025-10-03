@@ -23,7 +23,7 @@ func TestServer_ListenAndServe(t *testing.T) {
 		}
 	}()
 
-	conn, err := grpc.Dial(port, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.NewClient(port, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		t.Fatalf("failed to dial gRPC server: %v", err)
 	}

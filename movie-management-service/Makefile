@@ -1,14 +1,16 @@
-USER = ranmerc
-DB_NAME = moviepin
-DATABASE_URL = postgres://$(ranmerc)@localhost:5432/$(DB_NAME)?sslmode=disable
+DB_USER = $(MOVIEPIN_DB_USER)
+DB_NAME = $(MOVIEPIN_DB_NAME)
+
+DATABASE_URL = postgres://$(DB_USER)@$(MOVIEPIN_DB_HOST):$(MOVIEPIN_DB_PORT)/$(DB_NAME)?sslmode=disable
+
 MIGRATIONS_PATH = db/migrations
 
 create-db:
-	psql -c 'CREATE DATABASE "$(DB_NAME)"' -U $(USER) -d postgres;
-	psql -c 'CREATE EXTENSION IF NOT EXISTS "uuid-ossp"' -U $(USER) -d $(DB_NAME);
+	psql -c 'CREATE DATABASE "$(DB_NAME)"' -U $(DB_USER) -d postgres;
+	psql -c 'CREATE EXTENSION IF NOT EXISTS "uuid-ossp"' -U $(DB_USER) -d $(DB_NAME);
 
 drop-db:
-	psql -c 'DROP DATABASE IF EXISTS "$(DB_NAME)"' -U $(USER) -d postgres
+	psql -c 'DROP DATABASE IF EXISTS "$(DB_NAME)"' -U $(DB_USER) -d postgres
 
 migrate-up:
 	migrate -database $(DATABASE_URL) -path $(MIGRATIONS_PATH) up
